@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Strollers</string>
+
+    <!-- Menu Items -->
+    <string name="settings">Settings</string>
+    <string name="help">Help</string>
 </resources>
