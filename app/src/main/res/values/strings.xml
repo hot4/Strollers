@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">Strollers</string>
 
+    <!-- Title Labels -->
+    <string name="main_label">MAIN</string>
+    <string name="settings_label">SETTINGS</string>
+
     <!-- Menu Items -->
     <string name="settings">Settings</string>
     <string name="help">Help</string>
+
+    <!-- Sample Text -->
+    <string name="how_to_use">How to Use</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dictum nibh eu libero congue, at lacinia tellus cursus. In at neque massa. Nulla non tellus ut nisl malesuada bibendum. Curabitur ut ultrices velit, eget iaculis nibh. Curabitur vehicula efficitur augue, ac porta purus imperdiet et. Quisque erat purus, cursus nec pharetra nec, aliquet vitae orci. Sed ac enim ut nisl varius ornare. Morbi faucibus leo neque, placerat iaculis libero consequat quis. Mauris iaculis interdum ante sed ornare. Maecenas tristique faucibus ex, sit amet tristique neque vestibulum id. Nullam aliquet turpis pellentesque massa pharetra fringilla. Vivamus iaculis lectus eget massa efficitur mattis. Integer dapibus purus dui, euismod interdum nulla scelerisque id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi venenatis efficitur eros quis aliquam. Vestibulum eget interdum lectus, sed rutrum sem. Mauris in efficitur sem, vitae laoreet risus. Nulla dapibus, ligula sed tincidunt porttitor, turpis leo imperdiet nunc, vel rhoncus turpis ligula ut neque. Quisque sed ornare turpis. Nullam efficitur varius dapibus. Suspendisse urna magna, imperdiet nec quam sit amet, pulvinar sodales sem. Vivamus interdum cursus tincidunt. Morbi quis varius odio, quis scelerisque urna. Etiam efficitur sapien non sollicitudin blandit. Nunc pellentesque sodales nisl, at euismod metus vulputate sit amet. Ut vestibulum nibh urna, ut elementum lectus dictum sit amet. Nulla lobortis odio laoreet faucibus ullamcorper. Vestibulum sagittis ut mi eget blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus a lectus sem. Fusce ullamcorper arcu sed mi egestas pretium. Maecenas vel mi eu urna scelerisque scelerisque. Fusce mollis risus in turpis feugiat, et dictum turpis placerat. Aliquam eros erat, fringilla nec urna in, eleifend tristique velit. Nunc ullamcorper et velit vel imperdiet. Praesent placerat ipsum eget pretium ornare. Sed congue in ante eu porttitor. Cras non enim aliquet, facilisis arcu eget, rhoncus dui. Nunc at dui sapien. Integer viverra, lorem pharetra rhoncus porta, ex tortor consectetur ex, in molestie mauris libero a enim. Duis quis lectus vel ipsum aliquet facilisis rhoncus eget lectus. Integer pellentesque lobortis eleifend. Nam in pharetra arcu, et ullamcorper diam. Sed consequat fermentum vulputate. Nullam feugiat diam metus, eu luctus libero accumsan id. Maecenas tincidunt ac libero sed lobortis. Integer eget justo eros. Nam consequat semper rutrum. Ut sit amet turpis non mauris ultrices tincidunt quis et justo. Nam ac luctus tellus.</string>
 </resources>
