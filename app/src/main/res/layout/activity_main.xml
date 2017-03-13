@@ -22,7 +22,7 @@
         <Button
             android:id="@+id/routing"
             style="@style/ButtonOptions"
-            android:text="@string/routing_title" />
+            android:text="@string/route_title" />
 
         <Button
             android:id="@+id/account"
