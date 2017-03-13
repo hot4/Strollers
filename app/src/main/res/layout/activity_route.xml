@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:divider="@drawable/divider_horizontal"
+    android:showDividers="middle">
 
-    <TextView
-        android:id="@+id/settings_subtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_margin"
-        android:text="@string/how_to_use"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <Button
+        android:id="@+id/distance"
+        style="@style/ButtonOptionsVertical"
+        android:text="Distance"/>
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/settings_subtitle"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin">
+    <Button
+        android:id="@+id/calorie"
+        style="@style/ButtonOptionsVertical"
+        android:text="Calories"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lorem_ipsum" />
-    </ScrollView>
-
-</RelativeLayout>
+    <Button
+        android:id="@+id/destination"
+        style="@style/ButtonOptionsVertical"
+        android:text="Destination"/>
+</LinearLayout>

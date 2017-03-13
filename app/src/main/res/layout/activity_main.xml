@@ -10,23 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@drawable/divider"
+        android:divider="@drawable/divider_vertical"
         android:orientation="horizontal"
         android:showDividers="middle">
 
         <Button
             android:id="@+id/main"
-            style="@style/ButtonOptions"
+            style="@style/ButtonOptionsHorizontal"
             android:text="@string/map_title" />
 
         <Button
             android:id="@+id/routing"
-            style="@style/ButtonOptions"
+            style="@style/ButtonOptionsHorizontal"
             android:text="@string/route_title" />
 
         <Button
             android:id="@+id/account"
-            style="@style/ButtonOptions"
+            style="@style/ButtonOptionsHorizontal"
             android:text="@string/account_title" />
 
     </LinearLayout>
