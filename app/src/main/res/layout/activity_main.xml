@@ -4,28 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <include layout="@layout/activity_main_map" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:divider="@drawable/divider"
+        android:orientation="horizontal"
+        android:showDividers="middle">
 
         <Button
-            android:id="@+id/Tab1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Tab 1" />
+            android:id="@+id/main"
+            style="@style/ButtonOptions"
+            android:text="@string/map_title" />
 
         <Button
-            android:id="@+id/Tab2"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Tab 2" />
+            android:id="@+id/routing"
+            style="@style/ButtonOptions"
+            android:text="@string/routing_title" />
+
+        <Button
+            android:id="@+id/account"
+            style="@style/ButtonOptions"
+            android:text="@string/account_title" />
 
     </LinearLayout>
 </LinearLayout>
