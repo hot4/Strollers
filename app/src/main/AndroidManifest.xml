@@ -39,9 +39,19 @@
         </activity>
 
         <activity
-            android:name=".RouteActivity"
-            android:label="@string/route_label"
+            android:name=".RouteTypeActivity"
+            android:label="@string/route_type_label"
             android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.support.PARENT_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".RouteOptionsActivity"
+            android:label="@string/route_options_label"
+            android:parentActivityName=".RouteTypeActivity">
             <intent-filter>
                 <action android:name="android.support.PARENT_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />

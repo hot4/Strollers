@@ -13,7 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
 
     private GoogleMap mMap;
 
@@ -26,13 +26,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        final Button button = (Button) findViewById(R.id.routing);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RouteActivity.class);
-                startActivity(intent);
-            }
-        });
+        Button button = (Button) findViewById(R.id.workout);
+        button.setOnClickListener(this);
     }
 
 
@@ -53,5 +48,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+        switch(v.getId()) {
+            case R.id.workout:
+                intent = new Intent(v.getContext(), RouteTypeActivity.class);
+                break;
+        }
+
+        startActivity(intent);
     }
 }

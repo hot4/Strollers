@@ -9,15 +9,15 @@
     <Button
         android:id="@+id/distance"
         style="@style/ButtonOptionsVertical"
-        android:text="Distance"/>
+        android:text="@string/distance"/>
 
     <Button
         android:id="@+id/calorie"
         style="@style/ButtonOptionsVertical"
-        android:text="Calories"/>
+        android:text="@string/calorie"/>
 
     <Button
         android:id="@+id/destination"
         style="@style/ButtonOptionsVertical"
-        android:text="Destination"/>
+        android:text="@string/destination"/>
 </LinearLayout>

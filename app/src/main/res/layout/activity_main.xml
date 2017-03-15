@@ -20,9 +20,9 @@
             android:text="@string/map_title" />
 
         <Button
-            android:id="@+id/routing"
+            android:id="@+id/workout"
             style="@style/ButtonOptionsHorizontal"
-            android:text="@string/route_title" />
+            android:text="@string/workout_title" />
 
         <Button
             android:id="@+id/account"
