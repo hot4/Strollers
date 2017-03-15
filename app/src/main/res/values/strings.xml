@@ -12,13 +12,16 @@
     <string name="map_title">Map</string>
 
     <!-- Distance -->
-    <string name="distance">distance</string>
-    <string name="distance_input">enter a desired distance</string>
-    <string name="miles">miles</string>>
+    <string name="distance_label">distance</string>
+    <string name="distance_prompt">enter a desired distance goal</string>
+    <string name="distance_unit">miles</string>>
 
     <!-- Calorie -->
-    <string name="calorie">calorie</string>
+    <string name="calorie_label">calorie</string>
+    <string name="calorie_prompt">enter a desired calorie goal</string>
+    <string name="calorie_unit">calories</string>
 
     <!-- Destination -->
-    <string name="destination">destination</string>
+    <string name="destination_label">destination</string>
+    <string name="destination_prompt">enter a desired destination</string>
 </resources>

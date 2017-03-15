@@ -17,9 +17,9 @@ public class RouteOptionsActivity extends Activity {
             Bundle bundle = intent.getExtras();
 
             TextView tv = (TextView) findViewById(R.id.prompt);
-            tv.setText((int) bundle.get(Constants.UNIT_PROMPT));
+            tv.setText((int) bundle.get(Constants.ROUTE_PROMPT));
             tv = (TextView) findViewById(R.id.unit);
-            tv.setText((int) bundle.get(Constants.UNIT));
+            tv.setText((int) bundle.get(Constants.ROUTE_UNIT));
         }
 
     }

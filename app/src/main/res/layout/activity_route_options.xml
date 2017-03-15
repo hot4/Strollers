@@ -36,4 +36,11 @@
             tools:text="MILES"/>
     </LinearLayout>
 
+    <ScrollView
+        android:id="@+id/route_options"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+    </ScrollView>
+
 </LinearLayout>

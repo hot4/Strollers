@@ -2,6 +2,7 @@ package com.example.strollers.strollers;
 
 public class Constants {
 
-    static String UNIT_PROMPT = "UNIT_PROMPT";
-    static String UNIT = "UNIT";
+    /* Route Options */
+    static String ROUTE_PROMPT = "ROUTE_PROMPT";
+    static String ROUTE_UNIT = "ROUTE_UNIT";
 }
