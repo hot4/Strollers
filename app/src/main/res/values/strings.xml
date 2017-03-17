@@ -24,4 +24,8 @@
     <!-- Destination -->
     <string name="destination_label">destination</string>
     <string name="destination_prompt">enter a desired destination</string>
+
+    <!-- Routes -->
+    <string name="no_routes">there are no available routes</string>
+    <string name="origin_label">origin</string>
 </resources>
