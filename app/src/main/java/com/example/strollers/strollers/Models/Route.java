@@ -1,4 +1,4 @@
-package com.example.strollers.strollers;
+package com.example.strollers.strollers.Models;
 
 public class Route {
     private String origin;

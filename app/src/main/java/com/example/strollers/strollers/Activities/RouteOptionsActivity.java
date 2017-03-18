@@ -1,4 +1,4 @@
-package com.example.strollers.strollers;
+package com.example.strollers.strollers.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,6 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.strollers.strollers.Adapters.RoutesAdapter;
+import com.example.strollers.strollers.Constants.Constants;
+import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.R;
+
 import java.util.LinkedList;
 
 import butterknife.BindView;
@@ -22,6 +26,12 @@ import butterknife.ButterKnife;
 
 public class RouteOptionsActivity extends Activity {
 
+    @BindView(R.id.prompt)
+    TextView prompt;
+    @BindView(R.id.unit)
+    TextView unit;
+    @BindView(R.id.amount)
+    EditText inputAmount;
     @BindView(R.id.empty_routes)
     LinearLayout emptyRoutes;
     @BindView(R.id.populated_routes)
@@ -43,10 +53,8 @@ public class RouteOptionsActivity extends Activity {
         if (intent != null) {
             Bundle bundle = intent.getExtras();
 
-            TextView tv = (TextView) findViewById(R.id.prompt);
-            tv.setText((int) bundle.get(Constants.ROUTE_PROMPT));
-            tv = (TextView) findViewById(R.id.unit);
-            tv.setText((int) bundle.get(Constants.ROUTE_UNIT));
+            prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
+            unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
         }
 
         recyclerView = routesRecyclerView;
@@ -58,18 +66,17 @@ public class RouteOptionsActivity extends Activity {
 
         recyclerView.setAdapter(routesAdapter);
 
-        final EditText et = (EditText) findViewById(R.id.amount);
-        et.setOnKeyListener(new EditText.OnKeyListener() {
+        inputAmount.setOnKeyListener(new EditText.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 /* User has completed entering a value */
                 if (keyCode == EditorInfo.IME_ACTION_SEARCH || keyCode == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
-                    String inputAmount = et.getText().toString();
+                    String amount = inputAmount.getText().toString();
                     Integer totalAmount = 0;
                     /* Amount is greater than or equal to zero */
-                    if (!inputAmount.isEmpty()) {
-                        totalAmount = Integer.parseInt(inputAmount);
+                    if (!amount.isEmpty()) {
+                        totalAmount = Integer.parseInt(amount);
                     }
                     determineRoutes(totalAmount);
                     displayRoutes();
@@ -81,14 +88,13 @@ public class RouteOptionsActivity extends Activity {
     }
 
     public LinkedList<Route> determineRoutes(Integer totalAmount) {
+        routesList.clear();
         if (totalAmount != 0) {
             /* Run Algorithm */
             Route route = new Route("Blitman", "Moe's Southwest Grill", 0.8);
             routesList.add(route);
             route = new Route("Blitman", "Union", 0.8);
             routesList.add(route);
-        } else {
-            routesList.clear();
         }
         routesAdapter.notifyDataSetChanged();
         return routesList;
