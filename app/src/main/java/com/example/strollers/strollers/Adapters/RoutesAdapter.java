@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesViewHolder> {
 
     private LinkedList<Route> routesList;
-    private int selectedPosition = 0;
 
     public static class RoutesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.origin_location)
@@ -57,12 +56,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesView
             @Override
             public void onClick(View v) {
 
-                // Updating old as well as new positions
-                notifyItemChanged(selectedPosition);
-                selectedPosition = position;
-                notifyItemChanged(selectedPosition);
-
-                // Do your another stuff for your onClick
             }
         });
     }

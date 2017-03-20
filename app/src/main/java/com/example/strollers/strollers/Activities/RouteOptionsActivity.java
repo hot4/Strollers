@@ -90,11 +90,7 @@ public class RouteOptionsActivity extends Activity {
     public LinkedList<Route> determineRoutes(Integer totalAmount) {
         routesList.clear();
         if (totalAmount != 0) {
-            /* Run Algorithm */
-            Route route = new Route("Blitman", "Moe's Southwest Grill", 0.8);
-            routesList.add(route);
-            route = new Route("Blitman", "Union", 0.8);
-            routesList.add(route);
+            /* TODO: IMPLEMENT ALGORITHM */
         }
         routesAdapter.notifyDataSetChanged();
         return routesList;
