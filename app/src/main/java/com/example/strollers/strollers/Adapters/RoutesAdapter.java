@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesViewHolder> {
 
     private LinkedList<Route> routesList;
+    private int selectedPosition = 0;
 
     public static class RoutesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.origin_location)
@@ -45,11 +46,25 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesView
     }
 
     @Override
-    public void onBindViewHolder(RoutesViewHolder holder, int position) {
+    public void onBindViewHolder(RoutesViewHolder holder, final int position) {
         Route route = routesList.get(position);
+
         holder.originLocation.setText(route.getOrigin());
         holder.destinationLocation.setText(route.getDestination());
         holder.distanceAmount.setText(String.format(Locale.US, "%.1f", route.getDistance()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Updating old as well as new positions
+                notifyItemChanged(selectedPosition);
+                selectedPosition = position;
+                notifyItemChanged(selectedPosition);
+
+                // Do your another stuff for your onClick
+            }
+        });
     }
 
     @Override
