@@ -1,20 +1,23 @@
 package com.example.strollers.strollers.Activities;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.strollers.strollers.R;
+import com.example.strollers.strollers.Utilities.PermissionUtility;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,10 +25,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.main_layout)
     RelativeLayout mLayout;
@@ -35,7 +40,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     Button workoutButton;
 
     private GoogleMap mMap;
-    private static final int PERMISSION_REQUEST_LOCATION = 0;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private static final int LOCATION_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +55,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
 
+        // Create an instance of GoogleAPIClient
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
         workoutButton.setOnClickListener(this);
 
         currLocButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Snackbar.make(mLayout, "Clicked current location", Snackbar.LENGTH_SHORT).show();
-                currentLocation();
+                findCurrentLocation();
             }
         });
     }
-
 
     /**
      * Manipulates the map once available.
@@ -71,57 +85,71 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        currentLocation();
-//        mMap = googleMap;
-//
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap = googleMap;
+        findCurrentLocation();
     }
 
-    public void currentLocation() {
-        // Check if the Location permission has been granted
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            // Permission is already available, start camera preview
-            Snackbar.make(mLayout,
-                    "Camera permission is available. Starting preview.",
-                    Snackbar.LENGTH_SHORT).show();
-//            startCamera();
-        } else {
-            // Permission is missing and must be requested.
-            requestLocationPermission();
-        }
-    }
-
-    public void requestLocationPermission() {
-        // Permission has not been denied
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // Display a SnackBar with a button to request the missing permission.
-            Snackbar snackbar = Snackbar.make(mLayout, "Location access is required to display routes based on current location.",
-                    Snackbar.LENGTH_INDEFINITE);
-
-            View snackbarView = snackbar.getView();
-            TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setMaxLines(3);
-
-            snackbar.setAction("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Open application setting
-                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    intent.setData(uri);
-                    startActivity(intent);
+    public void findCurrentLocation() {
+        ArrayList<String> requestPermissions = PermissionUtility.shouldAskForPermissions(this, new String[]{PermissionUtility.LOCATIONPERMISSION});
+        if (!requestPermissions.isEmpty()) {
+            // Request permission
+            for (String permission : requestPermissions) {
+                if (PermissionUtility.shouldShowRational(this, permission)) {
+                    PermissionUtility.showRational(this, mLayout);
+                } else {
+                    PermissionUtility.requestPermissions(this, new String[]{permission}, LOCATION_REQUEST_CODE);
                 }
-            }).show();
+            }
         } else {
-            // Request the permission. The result will be received in onRequestPermissionResult().
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
+            // Mark current location on map
+            onConnected(null);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        findCurrentLocation();
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        // Using PermissionUtility.hasPermission causes error
+        // Re-usable code cannot be achieved
+        if (ActivityCompat.checkSelfPermission(this, PermissionUtility.LOCATIONPERMISSION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        // Add current location on map and zoom
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+
+            LatLng currLoc = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLoc, 15.0f));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     @Override
