@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -7,23 +8,24 @@
     <include layout="@layout/activity_main_map" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/current_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_current_location"
         android:layout_above="@+id/linearLayout"
         android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="14dp"
-        android:layout_marginBottom="20dp" />
+        android:src="@drawable/ic_current_location" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@drawable/divider_vertical"
-        android:orientation="horizontal"
-        android:showDividers="middle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
+        android:divider="@drawable/divider_vertical"
+        android:orientation="horizontal"
+        android:showDividers="middle">
 
         <Button
             android:id="@+id/main"
