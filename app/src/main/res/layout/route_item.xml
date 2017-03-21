@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/origin_title"
+        style="@style/RouteItem"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/origin_label"
+        tools:text="Origin:" />
+
+    <TextView
+        android:id="@+id/origin_location"
+        style="@style/RouteItem"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        tools:text="Blitman" />
+
+    <TextView
+        android:id="@+id/destination_title"
+        style="@style/RouteItem"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/origin_title"
+        android:text="@string/destination_label"
+        tools:text="Destination" />
+
+    <TextView
+        android:id="@+id/destination_location"
+        style="@style/RouteItem"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/origin_location"
+        tools:text="Moe's SouthWest Grill" />
+
+    <TextView
+        android:id="@+id/distance_title"
+        style="@style/RouteItem"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/destination_title"
+        android:text="@string/distance_label"
+        tools:text="Distance" />
+
+    <TextView
+        android:id="@+id/distance_amount"
+        style="@style/RouteItem"
+        android:layout_below="@+id/destination_location"
+        android:layout_toStartOf="@+id/origin_location"
+        tools:text="20" />
+
+    <TextView
+        android:id="@+id/distance_unit"
+        style="@style/RouteItem"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/destination_location"
+        android:text="@string/distance_unit"
+        tools:text="Miles" />
+</RelativeLayout>

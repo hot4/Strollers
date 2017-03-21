@@ -1,8 +1,12 @@
-package com.example.strollers.strollers;
+package com.example.strollers.strollers.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
 
+import com.example.strollers.strollers.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -10,7 +14,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
+
+    @BindView(R.id.workout)
+    Button workoutButton;
 
     private GoogleMap mMap;
 
@@ -18,10 +28,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
+
+        workoutButton.setOnClickListener(this);
     }
 
 
@@ -42,5 +56,17 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+        switch (v.getId()) {
+            case R.id.workout:
+                intent = new Intent(v.getContext(), RouteTypeActivity.class);
+                break;
+        }
+
+        startActivity(intent);
     }
 }

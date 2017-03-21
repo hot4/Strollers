@@ -4,7 +4,12 @@
     <color name="colorPrimaryDark">#6093A4</color>
     <color name="colorAccent">#C2D5DC</color>
 
+    <!-- Buttons -->
     <color name="buttonPrimary">#B1CAD3</color>
 
+    <!-- Text -->
     <color name="text">#FFFFFF</color>
+
+    <!-- Divider -->
+    <color name="divider">#444444</color>
 </resources>
