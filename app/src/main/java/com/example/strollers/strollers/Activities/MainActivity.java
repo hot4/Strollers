@@ -179,6 +179,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void updateUI() {
         if (null != mCurrentLocation) {
             LatLng currLoc = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            mMap.clear();
             mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLoc, 15.0f));
         }
