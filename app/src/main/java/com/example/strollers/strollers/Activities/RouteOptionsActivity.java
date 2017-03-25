@@ -2,10 +2,12 @@ package com.example.strollers.strollers.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -43,6 +45,8 @@ public class RouteOptionsActivity extends Activity {
     private RecyclerView recyclerView;
     private RoutesAdapter routesAdapter;
 
+    private Location mCurrentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,7 @@ public class RouteOptionsActivity extends Activity {
 
             prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
             unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
+            mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
         }
 
         recyclerView = routesRecyclerView;
@@ -90,6 +95,8 @@ public class RouteOptionsActivity extends Activity {
     public LinkedList<Route> determineRoutes(Integer totalAmount) {
         routesList.clear();
         if (totalAmount != 0) {
+            Log.d("LOCATION LAT", Double.toString(mCurrentLocation.getLatitude()));
+            Log.d("LOCATION LNG", Double.toString(mCurrentLocation.getLongitude()));
             /* TODO: IMPLEMENT ALGORITHM */
         }
         routesAdapter.notifyDataSetChanged();

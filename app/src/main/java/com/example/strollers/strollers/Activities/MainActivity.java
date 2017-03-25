@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.PermissionUtility;
 import com.google.android.gms.common.ConnectionResult;
@@ -214,6 +215,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
         }
 
+        intent.putExtra(Constants.LOCATION, mCurrentLocation);
         startActivity(intent);
     }
 }
