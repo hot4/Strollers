@@ -3,6 +3,7 @@ package com.example.strollers.strollers.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,15 @@ import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.R;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,11 +50,24 @@ public class RouteOptionsActivity extends Activity {
     @BindView(R.id.routes_recycler_view)
     RecyclerView routesRecyclerView;
 
+    private static final String TAG = RouteOptionsActivity.class.getSimpleName();
+
     private LinkedList<Route> routesList = new LinkedList<>();
     private RecyclerView recyclerView;
     private RoutesAdapter routesAdapter;
 
     private Location mCurrentLocation;
+    private HttpsURLConnection urlConnection;
+
+    final static String pURL = "https://maps.googleapis.com/maps/api/place/search/json?";
+    private static StringBuilder location = new StringBuilder("location=");
+    private static StringBuilder radius = new StringBuilder("radius=");
+    private static StringBuilder key = new StringBuilder("key=");
+
+    private static final String rankBy = "rankBy=distance";
+    private static final String and = "&";
+
+    private static final Double milesMetersRatio = 1609.344;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +92,6 @@ public class RouteOptionsActivity extends Activity {
         routesAdapter = new RoutesAdapter(routesList);
 
         recyclerView.setAdapter(routesAdapter);
-
         inputAmount.setOnKeyListener(new EditText.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 /* User has completed entering a value */
@@ -78,12 +99,16 @@ public class RouteOptionsActivity extends Activity {
                         || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
                     String amount = inputAmount.getText().toString();
-                    Integer totalAmount = 0;
+                    Double totalMiles = 0.0;
                     /* Amount is greater than or equal to zero */
                     if (!amount.isEmpty()) {
-                        totalAmount = Integer.parseInt(amount);
+                        totalMiles = Double.parseDouble(amount);
                     }
-                    determineRoutes(totalAmount);
+                    try {
+                        determineRoutes(totalMiles);
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     displayRoutes();
                     return true;
                 }
@@ -92,12 +117,13 @@ public class RouteOptionsActivity extends Activity {
         });
     }
 
-    public LinkedList<Route> determineRoutes(Integer totalAmount) {
+    public LinkedList<Route> determineRoutes(Double totalMiles) throws ExecutionException, InterruptedException {
         routesList.clear();
-        if (totalAmount != 0) {
-            Log.d("LOCATION LAT", Double.toString(mCurrentLocation.getLatitude()));
-            Log.d("LOCATION LNG", Double.toString(mCurrentLocation.getLongitude()));
+        if (totalMiles != 0) {
             /* TODO: IMPLEMENT ALGORITHM */
+            Double meters = convertMilesToMeters(totalMiles);
+            String data = generateRoutes(meters);
+            Log.d(TAG, "Captured" + data);
         }
         routesAdapter.notifyDataSetChanged();
         return routesList;
@@ -111,6 +137,47 @@ public class RouteOptionsActivity extends Activity {
         } else {
             emptyRoutes.setVisibility(View.GONE);
             populatedRoutes.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public Double convertMilesToMeters(Double miles) {
+        return miles * milesMetersRatio;
+    }
+
+    public String generateRoutes(Double meters) throws ExecutionException, InterruptedException {
+        StringBuilder portURL = new StringBuilder(pURL);
+        location.append(Double.toString(mCurrentLocation.getLatitude())).append(",").append(Double.toString(mCurrentLocation.getLongitude()));
+        radius.append(Double.toString(meters));
+        key.append(getString(R.string.google_locations_key));
+        portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
+
+        Log.d(TAG, portURL.toString());
+        GetData getData = new GetData();
+        return getData.execute(portURL.toString()).get();
+    }
+
+    public class GetData extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder result = new StringBuilder();
+
+            try {
+                URL url = new URL(params[0]);
+                urlConnection = (HttpsURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+            }
+            return result.toString();
         }
     }
 }
