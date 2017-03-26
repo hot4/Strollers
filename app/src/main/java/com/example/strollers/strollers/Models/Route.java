@@ -5,6 +5,7 @@ public class Route {
     private String icon;
     private String id;
     private String name;
+    private Photos photos;
 
     private String origin;
     private String destination;
@@ -30,6 +31,10 @@ public class Route {
 
     public String getName() {
         return name;
+    }
+
+    public Photos getPhotos() {
+        return photos;
     }
 
     public String getOrigin() {
