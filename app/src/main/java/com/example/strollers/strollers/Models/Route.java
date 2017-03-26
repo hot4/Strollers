@@ -1,17 +1,39 @@
 package com.example.strollers.strollers.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Route {
+
+    @SerializedName("geometry")
     private Geometry geometry;
+
+    @SerializedName("icon")
     private String icon;
+
+    @SerializedName("id")
     private String id;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("photos")
     private Photos photos;
-    private String place_id;
+
+    @SerializedName("place_id")
+    private String placeid;
+
+    @SerializedName("reference")
     private String reference;
+
+    @SerializedName("scope")
     private String scope;
+
+    @SerializedName("types")
     private List<String> types;
+
+    @SerializedName("vicinity")
     private String vicinity;
 
     private String origin;
@@ -45,7 +67,7 @@ public class Route {
     }
 
     public String getPlaceID() {
-        return place_id;
+        return placeid;
     }
 
     public String getReference() {

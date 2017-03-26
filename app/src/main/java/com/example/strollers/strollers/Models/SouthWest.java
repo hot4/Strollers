@@ -1,14 +1,19 @@
 package com.example.strollers.strollers.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SouthWest {
-    private Integer lat;
-    private Integer lng;
+    @SerializedName("lat")
+    private Integer latitude;
+
+    @SerializedName("lng")
+    private Integer longitude;
 
     public Integer getLat() {
-        return lat;
+        return latitude;
     }
 
     public Integer getLng() {
-        return lng;
+        return longitude;
     }
 }

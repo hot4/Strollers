@@ -1,11 +1,21 @@
 package com.example.strollers.strollers.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Photos {
+
+    @SerializedName("height")
     private Double height;
-    private List<String> html_attributions;
-    private String photo_reference;
+
+    @SerializedName("html_attributions")
+    private List<String> htmlAttributions;
+
+    @SerializedName("photo_reference")
+    private String photoReference;
+
+    @SerializedName("width")
     private Double width;
 
     public Double getHeight() {
@@ -13,11 +23,11 @@ public class Photos {
     }
 
     public List<String> getHtmlAttributions() {
-        return html_attributions;
+        return htmlAttributions;
     }
 
     public String getPhotoReference() {
-        return photo_reference;
+        return photoReference;
     }
 
     public Double getWidth() {
