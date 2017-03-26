@@ -22,6 +22,10 @@ import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -66,6 +70,7 @@ public class RouteOptionsActivity extends Activity {
 
     private static final String rankBy = "rankBy=distance";
     private static final String and = "&";
+    private static final String results = "results";
 
     private static final Double milesMetersRatio = 1609.344;
 
@@ -104,11 +109,8 @@ public class RouteOptionsActivity extends Activity {
                     if (!amount.isEmpty()) {
                         totalMiles = Double.parseDouble(amount);
                     }
-                    try {
-                        determineRoutes(totalMiles);
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
+                    determineRoutes(totalMiles);
                     displayRoutes();
                     return true;
                 }
@@ -117,13 +119,22 @@ public class RouteOptionsActivity extends Activity {
         });
     }
 
-    public LinkedList<Route> determineRoutes(Double totalMiles) throws ExecutionException, InterruptedException {
+    public LinkedList<Route> determineRoutes(Double totalMiles) {
         routesList.clear();
         if (totalMiles != 0) {
             /* TODO: IMPLEMENT ALGORITHM */
             Double meters = convertMilesToMeters(totalMiles);
-            String data = generateRoutes(meters);
-            Log.d(TAG, "Captured" + data);
+            try {
+                String data = generateRoutes(meters);
+                JSONObject responseOb = new JSONObject(data);
+                JSONArray places = responseOb.getJSONArray(results);
+
+                Log.d(TAG, "Captured: " + data);
+                Log.d(TAG, "Places: " + places.toString());
+
+            } catch (ExecutionException | InterruptedException | JSONException e) {
+                e.printStackTrace();
+            }
         }
         routesAdapter.notifyDataSetChanged();
         return routesList;

@@ -1,6 +1,7 @@
 package com.example.strollers.strollers.Models;
 
 public class Route {
+    private Geometry geometry;
     private String origin;
     private String destination;
     private Double distance;
@@ -9,6 +10,10 @@ public class Route {
         this.origin = origin;
         this.destination = destination;
         this.distance = distance;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
     }
 
     public String getOrigin() {
