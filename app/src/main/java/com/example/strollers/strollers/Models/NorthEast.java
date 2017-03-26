@@ -3,18 +3,17 @@ package com.example.strollers.strollers.Models;
 import com.google.gson.annotations.SerializedName;
 
 public class NorthEast {
-
     @SerializedName("lat")
-    private Integer latitude;
+    private Double latitude;
 
     @SerializedName("lng")
-    private Integer longitude;
+    private Double longitude;
 
-    public Integer getLat() {
+    public Double getLat() {
         return latitude;
     }
 
-    public Integer getLng() {
+    public Double getLng() {
         return longitude;
     }
 }

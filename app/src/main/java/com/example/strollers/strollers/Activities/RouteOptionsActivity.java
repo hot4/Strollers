@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.strollers.strollers.Adapters.RoutesAdapter;
 import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.Models.Routes;
 import com.example.strollers.strollers.R;
 
 import org.json.JSONArray;
@@ -131,6 +132,9 @@ public class RouteOptionsActivity extends Activity {
 
                 Log.d(TAG, "Captured: " + data);
                 Log.d(TAG, "Places: " + places.toString());
+
+                Routes routes = Routes.parseJson(data);
+
 
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();
