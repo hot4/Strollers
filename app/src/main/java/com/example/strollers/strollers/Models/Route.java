@@ -18,9 +18,6 @@ public class Route {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("photos")
-    private Photos photos;
-
     @SerializedName("place_id")
     private String placeid;
 
@@ -50,6 +47,14 @@ public class Route {
         return geometry;
     }
 
+    public Double getLat(){
+        return getGeometry().getLocation().getLat();
+    }
+
+    public Double getLng() {
+        return getGeometry().getLocation().getLng();
+    }
+
     public String getIcon() {
         return icon;
     }
@@ -60,10 +65,6 @@ public class Route {
 
     public String getName() {
         return name;
-    }
-
-    public Photos getPhotos() {
-        return photos;
     }
 
     public String getPlaceID() {

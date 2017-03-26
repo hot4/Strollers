@@ -16,6 +16,10 @@ public class Routes {
         routesList = new ArrayList<>();
     }
 
+    public List getRoutesList() {
+        return routesList;
+    }
+
     public static Routes parseJson(String response) {
         Gson gson = new GsonBuilder().create();
         Routes routesResponse = gson.fromJson(response, Routes.class);

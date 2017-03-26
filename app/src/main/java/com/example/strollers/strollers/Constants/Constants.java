@@ -8,4 +8,6 @@ public class Constants {
 
     /* Location */
     public static String LOCATION = "LOCATION";
+    public static String LATITUDE = "LATITUDE";
+    public static String LONGITUDE = "LONGITUDE";
 }

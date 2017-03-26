@@ -1,7 +1,9 @@
 package com.example.strollers.strollers.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 
 import com.example.strollers.strollers.Adapters.RoutesAdapter;
 import com.example.strollers.strollers.Constants.Constants;
+import com.example.strollers.strollers.Helpers.RouteHelper;
+import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
 import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.Models.Routes;
 import com.example.strollers.strollers.R;
@@ -32,7 +36,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -57,7 +62,7 @@ public class RouteOptionsActivity extends Activity {
 
     private static final String TAG = RouteOptionsActivity.class.getSimpleName();
 
-    private LinkedList<Route> routesList = new LinkedList<>();
+    private List<Route> routesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private RoutesAdapter routesAdapter;
 
@@ -72,8 +77,6 @@ public class RouteOptionsActivity extends Activity {
     private static final String rankBy = "rankBy=distance";
     private static final String and = "&";
     private static final String results = "results";
-
-    private static final Double milesMetersRatio = 1609.344;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +98,7 @@ public class RouteOptionsActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        routesAdapter = new RoutesAdapter(routesList);
+        routesAdapter = new RoutesAdapter(this, routesList);
 
         recyclerView.setAdapter(routesAdapter);
         inputAmount.setOnKeyListener(new EditText.OnKeyListener() {
@@ -120,26 +123,29 @@ public class RouteOptionsActivity extends Activity {
         });
     }
 
-    public LinkedList<Route> determineRoutes(Double totalMiles) {
+    public List<Route> determineRoutes(Double totalMiles) {
         routesList.clear();
         if (totalMiles != 0) {
-            /* TODO: IMPLEMENT ALGORITHM */
-            Double meters = convertMilesToMeters(totalMiles);
+            Double radius = RouteHelper.convertMilesToMeters(totalMiles);
             try {
-                String data = generateRoutes(meters);
+                String data = generateRoutes(radius);
                 JSONObject responseOb = new JSONObject(data);
                 JSONArray places = responseOb.getJSONArray(results);
 
-                Log.d(TAG, "Captured: " + data);
-                Log.d(TAG, "Places: " + places.toString());
-
                 Routes routes = Routes.parseJson(data);
-
-
+                routesList.addAll(routes.getRoutesList());
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        SharedPreferences sharedPrefs = getPreferences(Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        SharedPreferencesHelper.putDouble(editor, Constants.LATITUDE, mCurrentLocation.getLatitude());
+        SharedPreferencesHelper.putDouble(editor, Constants.LONGITUDE, mCurrentLocation.getLongitude());
+        editor.apply();
+
         routesAdapter.notifyDataSetChanged();
         return routesList;
     }
@@ -153,10 +159,6 @@ public class RouteOptionsActivity extends Activity {
             emptyRoutes.setVisibility(View.GONE);
             populatedRoutes.setVisibility(View.VISIBLE);
         }
-    }
-
-    public Double convertMilesToMeters(Double miles) {
-        return miles * milesMetersRatio;
     }
 
     public String generateRoutes(Double meters) throws ExecutionException, InterruptedException {
