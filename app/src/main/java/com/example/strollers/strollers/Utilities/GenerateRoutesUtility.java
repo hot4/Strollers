@@ -19,20 +19,23 @@ public class GenerateRoutesUtility {
 
     private HttpsURLConnection urlConnection;
 
-    final static String pURL = "https://maps.googleapis.com/maps/api/place/search/json?";
+    private final static String pURL = "https://maps.googleapis.com/maps/api/place/search/json?";
     private static StringBuilder location = new StringBuilder("location=");
     private static StringBuilder radius = new StringBuilder("radius=");
+    private static StringBuilder rankBy = new StringBuilder("rankBy=");
+    private static StringBuilder type = new StringBuilder("type=");
     private static StringBuilder key = new StringBuilder("key=");
 
-    private static final String rankBy = "rankBy=distance";
     private static final String and = "&";
 
     public String getJson(Context context, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
         StringBuilder portURL = new StringBuilder(pURL);
         location.append(Double.toString(currentLocation.getLatitude())).append(",").append(Double.toString(currentLocation.getLongitude()));
         radius.append(Double.toString(meters));
+        rankBy.append(context.getString(R.string.distance_label));
+        type.append(context.getString(R.string.cafe));
         key.append(context.getString(R.string.google_locations_key));
-        portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
+        portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(type).append(and).append(key);
 
         GetData getData = new GetData();
         return getData.execute(portURL.toString()).get();
