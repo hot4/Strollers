@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class PermissionUtility {
 
     public static final String LOCATIONPERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
-    public static final String INTERNETPERMISSION = Manifest.permission.INTERNET;
 
     private static boolean useRunTimePermissions() {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1;
@@ -50,7 +49,7 @@ public class PermissionUtility {
         // Provide an additional rationale to the user if the permission was not granted
         // and the user would benefit from additional context for the use of the permission.
         // Display a SnackBar with a button to request the missing permission.
-        Snackbar snackbar = Snackbar.make(activityLayout, "Location access is required to display routes based on current location.",
+        Snackbar snackbar = Snackbar.make(activityLayout, "Position access is required to display routes based on current location.",
                 Snackbar.LENGTH_INDEFINITE);
 
         View snackbarView = snackbar.getView();

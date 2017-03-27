@@ -2,9 +2,10 @@ package com.example.strollers.strollers.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Route {
+public class Route implements Serializable {
 
     @SerializedName("geometry")
     private Geometry geometry;
@@ -48,11 +49,11 @@ public class Route {
     }
 
     public Double getLat(){
-        return getGeometry().getLocation().getLat();
+        return getGeometry().getPosition().getLat();
     }
 
     public Double getLng() {
-        return getGeometry().getLocation().getLng();
+        return getGeometry().getPosition().getLng();
     }
 
     public String getIcon() {

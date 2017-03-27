@@ -6,8 +6,9 @@ public class Constants {
     public static String ROUTE_PROMPT = "ROUTE_PROMPT";
     public static String ROUTE_UNIT = "ROUTE_UNIT";
 
-    /* Location */
+    /* Position */
     public static String LOCATION = "LOCATION";
+    public static String DESTINATION = "DESTINATION";
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";
 }

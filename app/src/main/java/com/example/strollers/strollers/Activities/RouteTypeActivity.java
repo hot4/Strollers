@@ -31,7 +31,10 @@ public class RouteTypeActivity extends Activity implements View.OnClickListener 
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
+
+            if (bundle != null) {
+                mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
+            }
         }
 
         distanceButton.setOnClickListener(this);

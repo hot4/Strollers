@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,21 +24,14 @@ import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
 import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.Models.Routes;
 import com.example.strollers.strollers.R;
+import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,22 +51,11 @@ public class RouteOptionsActivity extends Activity {
     @BindView(R.id.routes_recycler_view)
     RecyclerView routesRecyclerView;
 
-    private static final String TAG = RouteOptionsActivity.class.getSimpleName();
-
     private List<Route> routesList = new ArrayList<>();
-    private RecyclerView recyclerView;
     private RoutesAdapter routesAdapter;
 
     private Location mCurrentLocation;
-    private HttpsURLConnection urlConnection;
 
-    final static String pURL = "https://maps.googleapis.com/maps/api/place/search/json?";
-    private static StringBuilder location = new StringBuilder("location=");
-    private static StringBuilder radius = new StringBuilder("radius=");
-    private static StringBuilder key = new StringBuilder("key=");
-
-    private static final String rankBy = "rankBy=distance";
-    private static final String and = "&";
     private static final String results = "results";
 
     @Override
@@ -88,12 +68,14 @@ public class RouteOptionsActivity extends Activity {
         if (intent != null) {
             Bundle bundle = intent.getExtras();
 
-            prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
-            unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
-            mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
+            if (bundle != null) {
+                prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
+                unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
+                mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
+            }
         }
 
-        recyclerView = routesRecyclerView;
+        RecyclerView recyclerView = routesRecyclerView;
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -128,9 +110,10 @@ public class RouteOptionsActivity extends Activity {
         if (totalMiles != 0) {
             Double radius = RouteHelper.convertMilesToMeters(totalMiles);
             try {
-                String data = generateRoutes(radius);
+                GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
+                String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
                 JSONObject responseOb = new JSONObject(data);
-                JSONArray places = responseOb.getJSONArray(results);
+                responseOb.getJSONArray(results);
 
                 Routes routes = Routes.parseJson(data);
                 routesList.addAll(routes.getRoutesList());
@@ -158,43 +141,6 @@ public class RouteOptionsActivity extends Activity {
         } else {
             emptyRoutes.setVisibility(View.GONE);
             populatedRoutes.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public String generateRoutes(Double meters) throws ExecutionException, InterruptedException {
-        StringBuilder portURL = new StringBuilder(pURL);
-        location.append(Double.toString(mCurrentLocation.getLatitude())).append(",").append(Double.toString(mCurrentLocation.getLongitude()));
-        radius.append(Double.toString(meters));
-        key.append(getString(R.string.google_locations_key));
-        portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
-
-        Log.d(TAG, portURL.toString());
-        GetData getData = new GetData();
-        return getData.execute(portURL.toString()).get();
-    }
-
-    public class GetData extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            StringBuilder result = new StringBuilder();
-
-            try {
-                URL url = new URL(params[0]);
-                urlConnection = (HttpsURLConnection) url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                urlConnection.disconnect();
-            }
-            return result.toString();
         }
     }
 }

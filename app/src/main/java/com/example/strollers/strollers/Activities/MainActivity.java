@@ -14,22 +14,21 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.strollers.strollers.Constants.Constants;
+import com.example.strollers.strollers.Helpers.MapHelper;
+import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.PermissionUtility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Marker;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -53,8 +52,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
-    private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+    private Marker mCurrentMarker;
     private Location mCurrentLocation;
+    private Marker mDestinationMarker;
+    private Route mDestinationLocation;
     private String mLastUpdateTime;
     private static final int LOCATION_REQUEST_CODE = 0;
 
@@ -81,6 +82,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                mDestinationLocation = (Route) bundle.get(Constants.DESTINATION);
+            }
+        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -109,6 +118,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (mDestinationLocation != null) {
+            mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
+        }
         findCurrentLocation();
     }
 
@@ -179,10 +191,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void updateUI() {
         if (null != mCurrentLocation) {
-            LatLng currLoc = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLoc, 15.0f));
+            mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
         }
     }
 

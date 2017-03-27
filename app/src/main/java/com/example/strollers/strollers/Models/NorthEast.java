@@ -2,7 +2,9 @@ package com.example.strollers.strollers.Models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class NorthEast {
+import java.io.Serializable;
+
+public class NorthEast implements Serializable {
     @SerializedName("lat")
     private Double latitude;
 
