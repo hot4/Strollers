@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class Route implements Serializable {
+public class Destination implements Serializable {
 
     @SerializedName("geometry")
     private Geometry geometry;
@@ -33,16 +33,6 @@ public class Route implements Serializable {
 
     @SerializedName("vicinity")
     private String vicinity;
-
-    private String origin;
-    private String destination;
-    private Double distance;
-
-    public Route(String origin, String destination, Double distance) {
-        this.origin = origin;
-        this.destination = destination;
-        this.distance = distance;
-    }
 
     public Geometry getGeometry() {
         return geometry;
@@ -86,17 +76,5 @@ public class Route implements Serializable {
 
     public String getVicinity() {
         return vicinity;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public Double getDistance() {
-        return distance;
     }
 }

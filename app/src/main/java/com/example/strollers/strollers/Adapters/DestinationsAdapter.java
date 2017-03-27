@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import com.example.strollers.strollers.Activities.MainActivity;
 import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
-import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.R;
 
 import java.util.List;
@@ -24,11 +23,11 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesViewHolder> {
+public class DestinationsAdapter extends RecyclerView.Adapter<DestinationsAdapter.RoutesViewHolder> {
 
     private Activity mActivity;
     private Context mContext;
-    private List<Route> routesList;
+    private List<Destination> destsList;
 
     public static class RoutesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.origin_location)
@@ -45,9 +44,9 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesView
         }
     }
 
-    public RoutesAdapter(Activity activity, List<Route> routesList) {
+    public DestinationsAdapter(Activity activity, List<Destination> destsList) {
         this.mActivity = activity;
-        this.routesList = routesList;
+        this.destsList = destsList;
     }
 
     @Override
@@ -58,25 +57,25 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesView
 
     @Override
     public void onBindViewHolder(RoutesViewHolder holder, final int position) {
-        final Route route = routesList.get(position);
+        final Destination destination = destsList.get(position);
 
         SharedPreferences sharedPrefs = mActivity.getPreferences(Context.MODE_PRIVATE);
         Double currLat = SharedPreferencesHelper.getDouble(sharedPrefs, Constants.LATITUDE);
         Double currLng = SharedPreferencesHelper.getDouble(sharedPrefs, Constants.LONGITUDE);
 
-        Double distance = RouteHelper.distance(currLat, currLng, route.getLat(), route.getLng());
+        Double distance = RouteHelper.distance(currLat, currLng, destination.getLat(), destination.getLng());
         StringBuilder total = new StringBuilder(String.format(Locale.US, "%1$,.2f", distance));
         total.append(" ");
         total.append(mActivity.getString(R.string.distance_unit));
 
-        holder.destinationLocation.setText(route.getName());
+        holder.destinationLocation.setText(destination.getName());
         holder.distanceAmount.setText(total.toString());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, MainActivity.class);
-                intent.putExtra(Constants.DESTINATION, route);
+                intent.putExtra(Constants.DESTINATION, destination);
                 mActivity.startActivity(intent);
             }
         });
@@ -84,6 +83,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RoutesView
 
     @Override
     public int getItemCount() {
-        return routesList.size();
+        return destsList.size();
     }
 }

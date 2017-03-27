@@ -17,12 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.strollers.strollers.Adapters.RoutesAdapter;
+import com.example.strollers.strollers.Adapters.DestinationsAdapter;
 import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
-import com.example.strollers.strollers.Models.Route;
-import com.example.strollers.strollers.Models.Routes;
+import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.Destinations;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
@@ -51,8 +51,8 @@ public class RouteOptionsActivity extends Activity {
     @BindView(R.id.routes_recycler_view)
     RecyclerView routesRecyclerView;
 
-    private List<Route> routesList = new ArrayList<>();
-    private RoutesAdapter routesAdapter;
+    private List<Destination> destsList = new ArrayList<>();
+    private DestinationsAdapter destsAdapter;
 
     private Location mCurrentLocation;
 
@@ -80,9 +80,9 @@ public class RouteOptionsActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        routesAdapter = new RoutesAdapter(this, routesList);
+        destsAdapter = new DestinationsAdapter(this, destsList);
 
-        recyclerView.setAdapter(routesAdapter);
+        recyclerView.setAdapter(destsAdapter);
         inputAmount.setOnKeyListener(new EditText.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 /* User has completed entering a value */
@@ -105,8 +105,8 @@ public class RouteOptionsActivity extends Activity {
         });
     }
 
-    public List<Route> determineRoutes(Double totalMiles) {
-        routesList.clear();
+    public List<Destination> determineRoutes(Double totalMiles) {
+        destsList.clear();
         if (totalMiles != 0) {
             Double radius = RouteHelper.convertMilesToMeters(totalMiles);
             try {
@@ -115,8 +115,8 @@ public class RouteOptionsActivity extends Activity {
                 JSONObject responseOb = new JSONObject(data);
                 responseOb.getJSONArray(results);
 
-                Routes routes = Routes.parseJson(data);
-                routesList.addAll(routes.getRoutesList());
+                Destinations destinations = Destinations.parseJson(data);
+                destsList.addAll(destinations.getDestsList());
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
@@ -129,13 +129,13 @@ public class RouteOptionsActivity extends Activity {
         SharedPreferencesHelper.putDouble(editor, Constants.LONGITUDE, mCurrentLocation.getLongitude());
         editor.apply();
 
-        routesAdapter.notifyDataSetChanged();
-        return routesList;
+        destsAdapter.notifyDataSetChanged();
+        return destsList;
     }
 
     public void displayRoutes() {
         /* No routes are found */
-        if (routesList.isEmpty()) {
+        if (destsList.isEmpty()) {
             emptyRoutes.setVisibility(View.VISIBLE);
             populatedRoutes.setVisibility(View.GONE);
         } else {

@@ -2,7 +2,7 @@ package com.example.strollers.strollers.Helpers;
 
 import android.location.Location;
 
-import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.Models.Destination;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -25,11 +25,11 @@ public class MapHelper {
         return markMap(map, new LatLng(location.getLatitude(), location.getLongitude()), label);
     }
 
-    public static Marker markDestOnMap(GoogleMap map, Marker oldMarker, Route route, String label) {
+    public static Marker markDestOnMap(GoogleMap map, Marker oldMarker, Destination dest, String label) {
         if (oldMarker != null) {
             oldMarker.remove();
         }
 
-        return markMap(map, new LatLng(route.getLat(), route.getLng()), label);
+        return markMap(map, new LatLng(dest.getLat(), dest.getLng()), label);
     }
 }

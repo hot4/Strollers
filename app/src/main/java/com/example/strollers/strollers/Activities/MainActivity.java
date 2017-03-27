@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Helpers.MapHelper;
-import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.PermissionUtility;
 import com.google.android.gms.common.ConnectionResult;
@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker mCurrentMarker;
     private Location mCurrentLocation;
     private Marker mDestinationMarker;
-    private Route mDestinationLocation;
+    private Destination mDestinationLocation;
     private String mLastUpdateTime;
     private static final int LOCATION_REQUEST_CODE = 0;
 
@@ -87,7 +87,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (intent != null) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
-                mDestinationLocation = (Route) bundle.get(Constants.DESTINATION);
+                mDestinationLocation = (Destination) bundle.get(Constants.DESTINATION);
             }
         }
 
