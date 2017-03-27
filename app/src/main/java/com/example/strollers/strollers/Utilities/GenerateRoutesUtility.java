@@ -23,7 +23,6 @@ public class GenerateRoutesUtility {
     private static StringBuilder location;
     private static StringBuilder radius;
     private static StringBuilder rankBy;
-    private static StringBuilder type;
     private static StringBuilder key;
 
     private static final String and = "&";
@@ -32,7 +31,6 @@ public class GenerateRoutesUtility {
         location = new StringBuilder("location=");
         radius = new StringBuilder("radius=");
         rankBy = new StringBuilder("rankBy=");
-        type = new StringBuilder("type=");
         key = new StringBuilder("key=");
     }
 
@@ -43,9 +41,8 @@ public class GenerateRoutesUtility {
         location.append(Double.toString(currentLocation.getLatitude())).append(",").append(Double.toString(currentLocation.getLongitude()));
         radius.append(Double.toString(meters));
         rankBy.append(context.getString(R.string.distance_label));
-        type.append(context.getString(R.string.cafe));
         key.append(context.getString(R.string.google_locations_key));
-        portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(type).append(and).append(key);
+        portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
         GetData getData = new GetData();
         return getData.execute(portURL.toString()).get();
     }
