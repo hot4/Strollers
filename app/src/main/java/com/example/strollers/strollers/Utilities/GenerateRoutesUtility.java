@@ -20,15 +20,25 @@ public class GenerateRoutesUtility {
     private HttpsURLConnection urlConnection;
 
     private final static String pURL = "https://maps.googleapis.com/maps/api/place/search/json?";
-    private static StringBuilder location = new StringBuilder("location=");
-    private static StringBuilder radius = new StringBuilder("radius=");
-    private static StringBuilder rankBy = new StringBuilder("rankBy=");
-    private static StringBuilder type = new StringBuilder("type=");
-    private static StringBuilder key = new StringBuilder("key=");
+    private static StringBuilder location;
+    private static StringBuilder radius;
+    private static StringBuilder rankBy;
+    private static StringBuilder type;
+    private static StringBuilder key;
 
     private static final String and = "&";
 
+    private static void resetParams() {
+        location = new StringBuilder("location=");
+        radius = new StringBuilder("radius=");
+        rankBy = new StringBuilder("rankBy=");
+        type = new StringBuilder("type=");
+        key = new StringBuilder("key=");
+    }
+
     public String getJson(Context context, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
+        resetParams();
+
         StringBuilder portURL = new StringBuilder(pURL);
         location.append(Double.toString(currentLocation.getLatitude())).append(",").append(Double.toString(currentLocation.getLongitude()));
         radius.append(Double.toString(meters));
@@ -36,7 +46,6 @@ public class GenerateRoutesUtility {
         type.append(context.getString(R.string.cafe));
         key.append(context.getString(R.string.google_locations_key));
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(type).append(and).append(key);
-
         GetData getData = new GetData();
         return getData.execute(portURL.toString()).get();
     }
