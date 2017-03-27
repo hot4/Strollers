@@ -2,6 +2,7 @@ package com.example.strollers.strollers.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,22 @@ public class RouteTypeActivity extends Activity implements View.OnClickListener 
     @BindView(R.id.calorie)
     Button calorieButton;
 
+    private Location mCurrentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_type);
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+
+            if (bundle != null) {
+                mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
+            }
+        }
 
         distanceButton.setOnClickListener(this);
         calorieButton.setOnClickListener(this);
@@ -43,6 +55,7 @@ public class RouteTypeActivity extends Activity implements View.OnClickListener 
                 break;
         }
 
+        intent.putExtra(Constants.LOCATION, mCurrentLocation);
         startActivity(intent);
     }
 }

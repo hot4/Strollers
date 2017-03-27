@@ -26,7 +26,7 @@
 
     <style name="ButtonOptions" parent="StandardText">
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/text</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button</item>
     </style>
 
@@ -43,6 +43,10 @@
     <style name="RouteItem" parent="StandardText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="RouteTitle" parent="RouteItem">
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

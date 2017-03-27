@@ -1,7 +1,10 @@
 package com.example.strollers.strollers.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,10 +19,19 @@ import android.widget.TextView;
 
 import com.example.strollers.strollers.Adapters.RoutesAdapter;
 import com.example.strollers.strollers.Constants.Constants;
+import com.example.strollers.strollers.Helpers.RouteHelper;
+import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
 import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.Models.Routes;
 import com.example.strollers.strollers.R;
+import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
-import java.util.LinkedList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,9 +51,12 @@ public class RouteOptionsActivity extends Activity {
     @BindView(R.id.routes_recycler_view)
     RecyclerView routesRecyclerView;
 
-    private LinkedList<Route> routesList = new LinkedList<>();
-    private RecyclerView recyclerView;
+    private List<Route> routesList = new ArrayList<>();
     private RoutesAdapter routesAdapter;
+
+    private Location mCurrentLocation;
+
+    private static final String results = "results";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +68,21 @@ public class RouteOptionsActivity extends Activity {
         if (intent != null) {
             Bundle bundle = intent.getExtras();
 
-            prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
-            unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
+            if (bundle != null) {
+                prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
+                unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
+                mCurrentLocation = (Location) bundle.get(Constants.LOCATION);
+            }
         }
 
-        recyclerView = routesRecyclerView;
+        RecyclerView recyclerView = routesRecyclerView;
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        routesAdapter = new RoutesAdapter(routesList);
+        routesAdapter = new RoutesAdapter(this, routesList);
 
         recyclerView.setAdapter(routesAdapter);
-
         inputAmount.setOnKeyListener(new EditText.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 /* User has completed entering a value */
@@ -73,12 +90,13 @@ public class RouteOptionsActivity extends Activity {
                         || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
                     String amount = inputAmount.getText().toString();
-                    Integer totalAmount = 0;
+                    Double totalMiles = 0.0;
                     /* Amount is greater than or equal to zero */
                     if (!amount.isEmpty()) {
-                        totalAmount = Integer.parseInt(amount);
+                        totalMiles = Double.parseDouble(amount);
                     }
-                    determineRoutes(totalAmount);
+
+                    determineRoutes(totalMiles);
                     displayRoutes();
                     return true;
                 }
@@ -87,11 +105,30 @@ public class RouteOptionsActivity extends Activity {
         });
     }
 
-    public LinkedList<Route> determineRoutes(Integer totalAmount) {
+    public List<Route> determineRoutes(Double totalMiles) {
         routesList.clear();
-        if (totalAmount != 0) {
-            /* TODO: IMPLEMENT ALGORITHM */
+        if (totalMiles != 0) {
+            Double radius = RouteHelper.convertMilesToMeters(totalMiles);
+            try {
+                GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
+                String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
+                JSONObject responseOb = new JSONObject(data);
+                responseOb.getJSONArray(results);
+
+                Routes routes = Routes.parseJson(data);
+                routesList.addAll(routes.getRoutesList());
+            } catch (ExecutionException | InterruptedException | JSONException e) {
+                e.printStackTrace();
+            }
         }
+
+        SharedPreferences sharedPrefs = getPreferences(Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        SharedPreferencesHelper.putDouble(editor, Constants.LATITUDE, mCurrentLocation.getLatitude());
+        SharedPreferencesHelper.putDouble(editor, Constants.LONGITUDE, mCurrentLocation.getLongitude());
+        editor.apply();
+
         routesAdapter.notifyDataSetChanged();
         return routesList;
     }

@@ -28,4 +28,7 @@
     <!-- Routes -->
     <string name="no_routes">there are no available routes</string>
     <string name="origin_label">origin</string>
+    <string name="current_location">current position</string>
+    <string name="cafe">cafe</string>
+
 </resources>
