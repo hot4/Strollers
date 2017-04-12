@@ -64,10 +64,10 @@ public class RouteOptionsActivity extends Activity {
         setContentView(R.layout.activity_route_options);
         ButterKnife.bind(this);
 
+        /* Set text for display and get current location */
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-
             if (bundle != null) {
                 prompt.setText((int) bundle.get(Constants.ROUTE_PROMPT));
                 unit.setText((int) bundle.get(Constants.ROUTE_UNIT));
@@ -75,6 +75,7 @@ public class RouteOptionsActivity extends Activity {
             }
         }
 
+        /* Set up adapter to display destinations */
         RecyclerView recyclerView = routesRecyclerView;
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -110,11 +111,13 @@ public class RouteOptionsActivity extends Activity {
         if (totalMiles != 0) {
             Double radius = RouteHelper.convertMilesToMeters(totalMiles);
             try {
+                /* URL request to get destinations */
                 GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
                 String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
                 JSONObject responseOb = new JSONObject(data);
                 responseOb.getJSONArray(results);
 
+                /* Serialize JSON into Destination and add to list */
                 Destinations destinations = Destinations.parseJson(data);
                 destsList.addAll(destinations.getDestsList());
             } catch (ExecutionException | InterruptedException | JSONException e) {
@@ -122,6 +125,7 @@ public class RouteOptionsActivity extends Activity {
             }
         }
 
+        /* Save latitude and longitude coordinates into shared preferences */
         SharedPreferences sharedPrefs = getPreferences(Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -129,6 +133,7 @@ public class RouteOptionsActivity extends Activity {
         SharedPreferencesHelper.putDouble(editor, Constants.LONGITUDE, mCurrentLocation.getLongitude());
         editor.apply();
 
+        /* Update adapter with new destinations list */
         destsAdapter.notifyDataSetChanged();
         return destsList;
     }

@@ -21,12 +21,14 @@ public class MapHelper {
     private static final String TAG = MapHelper.class.getSimpleName();
 
     private static Marker markMap(GoogleMap map, LatLng mark, String label) {
+        /* Mark location on map */
         Marker newMarker = map.addMarker(new MarkerOptions().position(mark).title(label.toUpperCase()));
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(mark, 15.0f));
         return newMarker;
     }
 
     public static Marker markCurrLocOnMap(GoogleMap map, Marker oldMarker, Location location, String label) {
+        /* Remove location from map */
         if (oldMarker != null) {
             oldMarker.remove();
         }
@@ -35,6 +37,7 @@ public class MapHelper {
     }
 
     public static Marker markDestOnMap(GoogleMap map, Marker oldMarker, Destination dest, String label) {
+        /* Remove destination from map */
         if (oldMarker != null) {
             oldMarker.remove();
         }

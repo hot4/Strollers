@@ -37,7 +37,6 @@ public class DestinationsAdapter extends RecyclerView.Adapter<DestinationsAdapte
         @BindView(R.id.distance_amount)
         TextView distanceAmount;
 
-        // each data item is just a string in this case
         public RoutesViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
@@ -59,11 +58,16 @@ public class DestinationsAdapter extends RecyclerView.Adapter<DestinationsAdapte
     public void onBindViewHolder(RoutesViewHolder holder, final int position) {
         final Destination destination = destsList.get(position);
 
+        /* Get latitude and longitude coordinates from shared preferences */
         SharedPreferences sharedPrefs = mActivity.getPreferences(Context.MODE_PRIVATE);
         Double currLat = SharedPreferencesHelper.getDouble(sharedPrefs, Constants.LATITUDE);
         Double currLng = SharedPreferencesHelper.getDouble(sharedPrefs, Constants.LONGITUDE);
 
+
+        /* Calculate linear distance between origin and destination */
         Double distance = RouteHelper.distance(currLat, currLng, destination.getLat(), destination.getLng());
+
+        /* Set text to fields */
         StringBuilder total = new StringBuilder(String.format(Locale.US, "%1$,.2f", distance));
         total.append(" ");
         total.append(mActivity.getString(R.string.distance_unit));
