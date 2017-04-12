@@ -207,6 +207,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (null != mCurrentLocation) {
             mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
 
+            /* Mark map with destination and draw line */
             if (drawRoute) {
                 drawRoute = false;
                 mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
