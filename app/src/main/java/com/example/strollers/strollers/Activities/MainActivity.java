@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Helpers.MapHelper;
 import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.PermissionUtility;
 import com.google.android.gms.common.ConnectionResult;
@@ -39,6 +41,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @BindView(R.id.main_layout)
     RelativeLayout mLayout;
     @BindView(R.id.current_location)
@@ -52,12 +56,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
+    private static final int LOCATION_REQUEST_CODE = 0;
+
     private Marker mCurrentMarker;
     private Location mCurrentLocation;
+    private String mLastUpdateTime;
+
     private Marker mDestinationMarker;
     private Destination mDestinationLocation;
-    private String mLastUpdateTime;
-    private static final int LOCATION_REQUEST_CODE = 0;
+
+    private Route route;
+    private boolean drawRoute = false;
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -88,6 +97,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 mDestinationLocation = (Destination) bundle.get(Constants.DESTINATION);
+                if (mDestinationLocation != null ) drawRoute = true;
             }
         }
 
@@ -118,10 +128,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (mDestinationLocation != null) {
-            mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
-        }
         findCurrentLocation();
+
     }
 
     public void findCurrentLocation() {
@@ -192,6 +200,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void updateUI() {
         if (null != mCurrentLocation) {
             mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
+
+            if (drawRoute) {
+                drawRoute = false;
+                mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
+                route = new Route(mCurrentLocation, mDestinationLocation);
+                mMap.addPolyline(MapHelper.drawRoute(this, route));
+            }
         }
     }
 
