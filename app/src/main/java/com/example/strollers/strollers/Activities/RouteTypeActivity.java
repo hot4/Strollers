@@ -28,6 +28,7 @@ public class RouteTypeActivity extends Activity implements View.OnClickListener 
         setContentView(R.layout.activity_route_type);
         ButterKnife.bind(this);
 
+        /* Get current location */
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
@@ -43,6 +44,8 @@ public class RouteTypeActivity extends Activity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
+        /* Start activity based on item clicked */
+        /* Pass strings for display and current location */
         Intent intent = new Intent(v.getContext(), RouteOptionsActivity.class);
         switch (v.getId()) {
             case R.id.distance:

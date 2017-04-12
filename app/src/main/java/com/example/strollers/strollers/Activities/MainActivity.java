@@ -83,6 +83,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        /* Get Destination if previously was selected */
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
@@ -118,16 +119,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        /* Mark Destination on map */
         if (mDestinationLocation != null) {
             mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
         }
+
         findCurrentLocation();
     }
 
     public void findCurrentLocation() {
         ArrayList<String> requestPermissions = PermissionUtility.shouldAskForPermissions(this, new String[]{PermissionUtility.LOCATIONPERMISSION});
         if (!requestPermissions.isEmpty()) {
-            // Request permission
+            /* Request permission */
             for (String permission : requestPermissions) {
                 if (PermissionUtility.shouldShowRational(this, permission)) {
                     PermissionUtility.showRational(this, mLayout);
@@ -142,18 +146,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        /* Response method for accepting/declining permissions */
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         findCurrentLocation();
     }
 
     @Override
     public void onStart() {
+        /* Connect api client when is application is actively running */
         super.onStart();
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onStop() {
+        /* Disconnect api client when application is closed */
         super.onStop();
         mGoogleApiClient.disconnect();
     }
@@ -184,12 +191,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
+        /* Set new location and time */
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
     }
 
     private void updateUI() {
+        /* Mark map with current location when map finishes loading */
         if (null != mCurrentLocation) {
             mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
         }
@@ -217,6 +226,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onClick(View v) {
+        /* Start activity based on item clicked */
         Intent intent = null;
         switch (v.getId()) {
             case R.id.workout:

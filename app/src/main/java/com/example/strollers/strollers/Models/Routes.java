@@ -21,6 +21,7 @@ public class Routes {
     }
 
     public static Routes parseJson(String response) {
+        /* Serialize JSON into Destination */
         Gson gson = new GsonBuilder().create();
         Routes routesResponse = gson.fromJson(response, Routes.class);
         return routesResponse;
