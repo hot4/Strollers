@@ -19,6 +19,7 @@ public class GenerateRoutesUtility {
 
     private HttpsURLConnection urlConnection;
 
+    /* URL keys */
     private final static String pURL = "https://maps.googleapis.com/maps/api/place/search/json?";
     private static StringBuilder location = new StringBuilder("location=");
     private static StringBuilder radius = new StringBuilder("radius=");
@@ -29,6 +30,7 @@ public class GenerateRoutesUtility {
     private static final String and = "&";
 
     public String getJson(Context context, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
+        /* Build URL */
         StringBuilder portURL = new StringBuilder(pURL);
         location.append(Double.toString(currentLocation.getLatitude())).append(",").append(Double.toString(currentLocation.getLongitude()));
         radius.append(Double.toString(meters));
@@ -37,6 +39,7 @@ public class GenerateRoutesUtility {
         key.append(context.getString(R.string.google_locations_key));
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(type).append(and).append(key);
 
+        /* Get data from URL */
         GetData getData = new GetData();
         return getData.execute(portURL.toString()).get();
     }
@@ -48,6 +51,7 @@ public class GenerateRoutesUtility {
             StringBuilder result = new StringBuilder();
 
             try {
+                /* Open up URL connection and retrieve data */
                 URL url = new URL(params[0]);
                 urlConnection = (HttpsURLConnection) url.openConnection();
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
