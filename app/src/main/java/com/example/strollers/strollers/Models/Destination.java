@@ -34,6 +34,8 @@ public class Destination implements Serializable {
     @SerializedName("vicinity")
     private String vicinity;
 
+    private Double distance = 0.0;
+
     public Geometry getGeometry() {
         return geometry;
     }
@@ -76,5 +78,11 @@ public class Destination implements Serializable {
 
     public String getVicinity() {
         return vicinity;
+    }
+
+    public Double getDistance() {return distance;}
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }

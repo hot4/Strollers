@@ -111,6 +111,7 @@ public class RouteOptionsActivity extends Activity {
         if (totalMiles != 0) {
             Double radius = RouteHelper.convertMilesToMeters(totalMiles);
             try {
+
                 /* URL request to get destinations */
                 GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
                 String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
@@ -119,19 +120,12 @@ public class RouteOptionsActivity extends Activity {
 
                 /* Serialize JSON into Destination and add to list */
                 Destinations destinations = Destinations.parseJson(data);
+                destinations.initializeDistances(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                 destsList.addAll(destinations.getDestsList());
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
         }
-
-        /* Save latitude and longitude coordinates into shared preferences */
-        SharedPreferences sharedPrefs = getPreferences(Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        SharedPreferencesHelper.putDouble(editor, Constants.LATITUDE, mCurrentLocation.getLatitude());
-        SharedPreferencesHelper.putDouble(editor, Constants.LONGITUDE, mCurrentLocation.getLongitude());
-        editor.apply();
 
         /* Update adapter with new destinations list */
         destsAdapter.notifyDataSetChanged();

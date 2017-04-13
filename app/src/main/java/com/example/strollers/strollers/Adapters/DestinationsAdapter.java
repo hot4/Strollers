@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 public class DestinationsAdapter extends RecyclerView.Adapter<DestinationsAdapter.RoutesViewHolder> {
 
     private Activity mActivity;
-    private Context mContext;
     private List<Destination> destsList;
 
     public static class RoutesViewHolder extends RecyclerView.ViewHolder {
@@ -58,14 +57,7 @@ public class DestinationsAdapter extends RecyclerView.Adapter<DestinationsAdapte
     public void onBindViewHolder(RoutesViewHolder holder, final int position) {
         final Destination destination = destsList.get(position);
 
-        /* Get latitude and longitude coordinates from shared preferences */
-        SharedPreferences sharedPrefs = mActivity.getPreferences(Context.MODE_PRIVATE);
-        Double currLat = SharedPreferencesHelper.getDouble(sharedPrefs, Constants.LATITUDE);
-        Double currLng = SharedPreferencesHelper.getDouble(sharedPrefs, Constants.LONGITUDE);
-
-
-        /* Calculate linear distance between origin and destination */
-        Double distance = RouteHelper.distance(currLat, currLng, destination.getLat(), destination.getLng());
+        Double distance = destination.getDistance();
 
         /* Set text to fields */
         StringBuilder total = new StringBuilder(String.format(Locale.US, "%1$,.2f", distance));
