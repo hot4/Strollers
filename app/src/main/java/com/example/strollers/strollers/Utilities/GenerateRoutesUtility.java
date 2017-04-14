@@ -3,6 +3,7 @@ package com.example.strollers.strollers.Utilities;
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.strollers.strollers.R;
 
@@ -16,6 +17,8 @@ import java.util.concurrent.ExecutionException;
 import javax.net.ssl.HttpsURLConnection;
 
 public class GenerateRoutesUtility {
+
+    private static final String TAG = GenerateRoutesUtility.class.getSimpleName();
 
     private HttpsURLConnection urlConnection;
 
@@ -46,6 +49,7 @@ public class GenerateRoutesUtility {
         key.append(context.getString(R.string.google_locations_key));
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
 
+        Log.d(TAG, String.valueOf(portURL));
         /* Get data from URL */
         GetData getData = new GetData();
         return getData.execute(portURL.toString()).get();
