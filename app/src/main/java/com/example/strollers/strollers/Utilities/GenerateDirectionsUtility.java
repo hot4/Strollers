@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 
 import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.R;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,11 +41,10 @@ public class GenerateDirectionsUtility {
     }
 
     private String getMapsApiDirectionsUrl() {
-        //String waypoints = "waypoints=optimize:true|";
-        String sensor = "sensor=false";
+        //String waypoints = "waypoints=optimize:true|"
         //String params = waypoints + "&" + sensor;
         String output = "json";
-        String url = pURL + output + "?"+ key + "&" + destination + "&" + origin + "&" + sensor;
+        String url = pURL + output + "?" + destination + "&" + origin + "&" + "mode=walking&" +key + "&";
         return url;
     }
 
@@ -126,16 +126,23 @@ public class GenerateDirectionsUtility {
     }
 
 
-    public String getLocations(Context context, Location currentLocation, Destination finalDestination) throws ExecutionException, InterruptedException {
+    public List<List<HashMap<String, String>>> getLocations(Context context, Location currentLocation, Destination finalDestination) throws ExecutionException, InterruptedException {
 
         resetParams();
-        key += context.getString(R.string.google_locations_key);
         origin += Double.toString(currentLocation.getLatitude()) + "," + Double.toString(currentLocation.getLongitude());
         destination += Double.toString(finalDestination.getLat()) + "," + Double.toString(finalDestination.getLng());
+        key += context.getString(R.string.google_locations_key);
         String url = getMapsApiDirectionsUrl();
         GetData getData = new GetData();
         String data = getData.execute(url).get();
-        return data;
+        List<List<HashMap<String, String>>> result = null;
+        try {
+            JSONObject jObject = new JSONObject(data);
+            result = parseJson(jObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     private class GetData extends AsyncTask<String, Void, String> {
@@ -155,6 +162,8 @@ public class GenerateDirectionsUtility {
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
+                JSONObject jObject = new JSONObject(result.toString());
+                parseJson(jObject);
                 in.close();
             } catch (Exception e) {
                 e.printStackTrace();

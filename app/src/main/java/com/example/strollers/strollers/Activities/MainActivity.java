@@ -1,6 +1,7 @@
 package com.example.strollers.strollers.Activities;
 
 import android.Manifest;
+import android.graphics.Color;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -28,6 +29,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -38,6 +41,8 @@ import org.json.JSONException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
@@ -206,24 +211,53 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         updateUI();
     }
 
+    private void drawRoute(List<List<HashMap<String, String>>> routes)
+    {
+        ArrayList<LatLng> points = null;
+        PolylineOptions polyLineOptions = null;
+
+        // traversing through routes
+        for (int i = 0; i < routes.size(); i++) {
+            points = new ArrayList<LatLng>();
+            polyLineOptions = new PolylineOptions();
+            List<HashMap<String, String>> path = routes.get(i);
+
+            for (int j = 0; j < path.size(); j++) {
+                HashMap<String, String> point = path.get(j);
+
+                double lat = Double.parseDouble(point.get("lat"));
+                double lng = Double.parseDouble(point.get("lng"));
+                LatLng position = new LatLng(lat, lng);
+
+                points.add(position);
+            }
+
+            polyLineOptions.addAll(points);
+            polyLineOptions.width(2);
+            polyLineOptions.color(Color.BLUE);
+        }
+
+        mMap.addPolyline(polyLineOptions);
+    }
+
     private void updateUI() {
         /* Mark map with current location when map finishes loading */
         if (null != mCurrentLocation) {
             mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
-            String data;
+            List<List<HashMap<String, String>>> data=null;
             /* Mark map with destination and draw line */
             if (drawRoute) {
                 try {
                     GenerateDirectionsUtility generateDirections = new GenerateDirectionsUtility();
                     data = generateDirections.getLocations(getApplicationContext(), mCurrentLocation, mDestinationLocation);
-
                 }catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 drawRoute = false;
                 mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
                 route = new Route(mCurrentLocation, mDestinationLocation);
-                mMap.addPolyline(MapHelper.drawRoute(this, route));
+                drawRoute(data);
+                //mMap.addPolyline(MapHelper.drawRoute(this, route));
             }
         }
     }
