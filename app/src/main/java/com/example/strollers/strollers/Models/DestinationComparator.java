@@ -14,11 +14,11 @@ public class DestinationComparator implements Comparator<Destination> {
         double distance2 = dest2.getDistance();
         if(distance1 < distance2)
         {
-            return -1;
+            return 1;
         }
         else if (distance1 > distance2)
         {
-            return 1;
+            return -1;
         }
         return 0;
     }
