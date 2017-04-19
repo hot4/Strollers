@@ -5,8 +5,10 @@ import android.location.Location;
 import android.test.mock.MockContext;
 import android.util.Log;
 
+import com.example.strollers.strollers.BuildConfig;
 import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.Models.Destinations;
+import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
 import org.json.JSONException;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,17 +30,15 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class)
 public class LocationTest {
-    private Context mContext;
-    private Context context;
-    private Location sampleLocation = new Location("");
+
+    private Location sampleLocation;
     private Double sampleDistance;
     private static final String results = "results";
 
     @Before
     public void setup(){
-        mContext = new MockContext();
-        context = new MockContext();
         sampleLocation = new Location("Test");
         sampleLocation.setLatitude(42.7309885);
         sampleLocation.setLongitude(-73.6820253);
@@ -47,19 +48,16 @@ public class LocationTest {
     @Test
     public void locationChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
         GenerateRoutesUtility testRoute = new GenerateRoutesUtility();
-        assertNotNull(context);
-        assertNotNull(sampleLocation);
-        assertNotNull(sampleDistance);
-        String data = testRoute.getJson(context, sampleLocation, sampleDistance);
+        String data = testRoute.getJson("AIzaSyByQVfeCEaBSKV-ir9kgs8ihgng5s5qohs", "distance", sampleLocation, sampleDistance);
         JSONObject responseOb = new JSONObject(data);
         responseOb.getJSONArray(results);
 
         /* Serialize JSON into Destination and add to list */
         Destinations destinations = Destinations.parseJson(data);
         destinations.initializeDistances(sampleLocation.getLatitude(), sampleLocation.getLongitude());
-        Log.d("BLEH", destinations.getDestsList().toString());
 
-        InputStream is = mContext.getAssets().open("distanceCheck.txt");
+        String file = "/distanceCheck.txt";
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line;
         List<Destination> destsList = destinations.getDestsList();
