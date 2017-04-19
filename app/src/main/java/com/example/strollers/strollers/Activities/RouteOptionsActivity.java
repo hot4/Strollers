@@ -23,6 +23,7 @@ import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
 import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.Models.Destinations;
+import com.example.strollers.strollers.Models.DestinationComparator;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
@@ -32,6 +33,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.Comparator;
+import java.util.Collections;
+
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,6 +131,9 @@ public class RouteOptionsActivity extends Activity {
                 e.printStackTrace();
             }
         }
+        /* sort Destinations List */
+        Comparator<Destination> destComparator = new DestinationComparator();
+        Collections.sort(destsList, destComparator);
 
         /* Update adapter with new destinations list */
         destsAdapter.notifyDataSetChanged();

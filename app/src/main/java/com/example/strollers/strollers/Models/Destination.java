@@ -86,3 +86,5 @@ public class Destination implements Serializable {
         this.distance = distance;
     }
 }
+
+
