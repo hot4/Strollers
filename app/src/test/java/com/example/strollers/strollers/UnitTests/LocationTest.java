@@ -2,11 +2,8 @@ package com.example.strollers.strollers.UnitTests;
 
 import android.content.Context;
 import android.location.Location;
-<<<<<<< HEAD
-=======
 import android.test.mock.MockContext;
 import android.util.Log;
->>>>>>> origin/DestinationTest
 
 import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.Models.Destinations;
@@ -25,11 +22,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-<<<<<<< HEAD
-import android.test.mock.MockContext;
-import android.util.Log;
-=======
->>>>>>> origin/DestinationTest
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
