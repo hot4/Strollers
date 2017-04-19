@@ -17,12 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.strollers.strollers.Adapters.RoutesAdapter;
+import com.example.strollers.strollers.Adapters.DestinationsAdapter;
 import com.example.strollers.strollers.Constants.Constants;
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Helpers.SharedPreferencesHelper;
-import com.example.strollers.strollers.Models.Route;
-import com.example.strollers.strollers.Models.Routes;
+import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.Destinations;
+import com.example.strollers.strollers.Models.DestinationComparator;
 import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
@@ -32,6 +33,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.Comparator;
+import java.util.Collections;
+
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,8 +56,8 @@ public class RouteOptionsActivity extends Activity {
     @BindView(R.id.routes_recycler_view)
     RecyclerView routesRecyclerView;
 
-    private List<Route> routesList = new ArrayList<>();
-    private RoutesAdapter routesAdapter;
+    private List<Destination> destsList = new ArrayList<>();
+    private DestinationsAdapter destsAdapter;
 
     private Location mCurrentLocation;
 
@@ -81,9 +86,9 @@ public class RouteOptionsActivity extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        routesAdapter = new RoutesAdapter(this, routesList);
+        destsAdapter = new DestinationsAdapter(this, destsList);
 
-        recyclerView.setAdapter(routesAdapter);
+        recyclerView.setAdapter(destsAdapter);
         inputAmount.setOnKeyListener(new EditText.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 /* User has completed entering a value */
@@ -106,12 +111,12 @@ public class RouteOptionsActivity extends Activity {
         });
     }
 
-    public List<Route> determineRoutes(Double totalMiles) {
-        /* Clear previous destination list */
-        routesList.clear();
+    public List<Destination> determineRoutes(Double totalMiles) {
+        destsList.clear();
         if (totalMiles != 0) {
             Double radius = RouteHelper.convertMilesToMeters(totalMiles);
             try {
+
                 /* URL request to get destinations */
                 GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
                 String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
@@ -119,29 +124,25 @@ public class RouteOptionsActivity extends Activity {
                 responseOb.getJSONArray(results);
 
                 /* Serialize JSON into Destination and add to list */
-                Routes routes = Routes.parseJson(data);
-                routesList.addAll(routes.getRoutesList());
+                Destinations destinations = Destinations.parseJson(data);
+                destinations.initializeDistances(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                destsList.addAll(destinations.getDestsList());
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
         }
-
-        /* Save latitude and longitude coordinates into shared preferences */
-        SharedPreferences sharedPrefs = getPreferences(Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        SharedPreferencesHelper.putDouble(editor, Constants.LATITUDE, mCurrentLocation.getLatitude());
-        SharedPreferencesHelper.putDouble(editor, Constants.LONGITUDE, mCurrentLocation.getLongitude());
-        editor.apply();
+        /* sort Destinations List */
+        Comparator<Destination> destComparator = new DestinationComparator();
+        Collections.sort(destsList, destComparator);
 
         /* Update adapter with new destinations list */
-        routesAdapter.notifyDataSetChanged();
-        return routesList;
+        destsAdapter.notifyDataSetChanged();
+        return destsList;
     }
 
     public void displayRoutes() {
         /* No routes are found */
-        if (routesList.isEmpty()) {
+        if (destsList.isEmpty()) {
             emptyRoutes.setVisibility(View.VISIBLE);
             populatedRoutes.setVisibility(View.GONE);
         } else {
