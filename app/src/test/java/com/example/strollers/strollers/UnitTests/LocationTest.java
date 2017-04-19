@@ -22,11 +22,12 @@ import android.test.mock.MockContext;
 import android.util.Log;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 public class LocationTest {
     private Context mContext;
     private Context context;
-    private Location sampleLocation;
+    private Location sampleLocation = new Location("");
     private Double sampleDistance;
     private static final String results = "results";
 
@@ -34,7 +35,7 @@ public class LocationTest {
     public void setup(){
         mContext = new MockContext();
         context = new MockContext();
-        sampleLocation = new Location("");
+        sampleLocation = new Location("Test");
         sampleLocation.setLatitude(42.7309885);
         sampleLocation.setLongitude(-73.6820253);
         sampleDistance = 10.0;
@@ -43,7 +44,10 @@ public class LocationTest {
     @Test
     public void locationChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
         GenerateRoutesUtility testRoute = new GenerateRoutesUtility();
-        String data =testRoute.getJson(context, sampleLocation, sampleDistance);
+        assertNotNull(context);
+        assertNotNull(sampleLocation);
+        assertNotNull(sampleDistance);
+        String data = testRoute.getJson(context, sampleLocation, sampleDistance);
         JSONObject responseOb = new JSONObject(data);
         responseOb.getJSONArray(results);
 
