@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -33,4 +36,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.google.code.gson:gson:2.8.0'
     testCompile 'junit:junit:4.12'
+    testCompile "org.robolectric:robolectric:3.3.2"
 }
