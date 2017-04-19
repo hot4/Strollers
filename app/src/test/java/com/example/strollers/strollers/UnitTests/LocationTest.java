@@ -18,9 +18,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,6 +37,7 @@ import static junit.framework.Assert.assertNotNull;
 @Config(constants = BuildConfig.class)
 public class LocationTest {
 
+    private Context context = RuntimeEnvironment.application;
     private Location sampleLocation;
     private Double sampleDistance;
     private static final String results = "results";
@@ -44,6 +48,7 @@ public class LocationTest {
         sampleLocation.setLatitude(42.7309885);
         sampleLocation.setLongitude(-73.6820253);
         sampleDistance = RouteHelper.convertMilesToMeters(10.0);
+
     }
 
     @Test
@@ -58,7 +63,7 @@ public class LocationTest {
         destinations.initializeDistances(sampleLocation.getLatitude(), sampleLocation.getLongitude());
 
         String file = "/distanceCheck.txt";
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream(file);
+        InputStream is = context.getAssets().open(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line;
         List<Destination> destsList = destinations.getDestsList();
