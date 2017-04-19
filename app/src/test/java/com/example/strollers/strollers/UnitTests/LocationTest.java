@@ -48,7 +48,7 @@ public class LocationTest {
     @Test
     public void locationChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
         GenerateRoutesUtility testRoute = new GenerateRoutesUtility();
-        String data = testRoute.getJson("AIzaSyByQVfeCEaBSKV-ir9kgs8ihgng5s5qohs", "distance", sampleLocation, sampleDistance);
+        String data = testRoute.getJson("AIzaSyCnF4sg6MaCkXXYs8LUNcf8hRWI5eJ4XpI", "distance", sampleLocation, sampleDistance);
         JSONObject responseOb = new JSONObject(data);
         responseOb.getJSONArray(results);
 
