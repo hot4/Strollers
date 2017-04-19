@@ -49,7 +49,6 @@ public class GenerateRoutesUtility {
         key.append(context.getString(R.string.google_locations_key));
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
 
-        Log.d(TAG, portURL.toString());
 
         /* Get data from URL */
         GetData getData = new GetData();
