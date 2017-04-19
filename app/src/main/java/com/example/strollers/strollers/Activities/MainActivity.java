@@ -19,6 +19,7 @@ import com.example.strollers.strollers.Helpers.MapHelper;
 import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.Models.Route;
 import com.example.strollers.strollers.R;
+import com.example.strollers.strollers.Utilities.GenerateDirectionsUtility;
 import com.example.strollers.strollers.Utilities.PermissionUtility;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,9 +33,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
 
+import org.json.JSONException;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -206,9 +210,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         /* Mark map with current location when map finishes loading */
         if (null != mCurrentLocation) {
             mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
-
+            String data;
             /* Mark map with destination and draw line */
             if (drawRoute) {
+                try {
+                    GenerateDirectionsUtility generateDirections = new GenerateDirectionsUtility();
+                    data = generateDirections.getLocations(getApplicationContext(), mCurrentLocation, mDestinationLocation);
+
+                }catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
                 drawRoute = false;
                 mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
                 route = new Route(mCurrentLocation, mDestinationLocation);
