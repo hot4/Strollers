@@ -38,15 +38,15 @@ public class GenerateRoutesUtility {
         key = new StringBuilder("key=");
     }
 
-    public String getJson(Context context, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
+    public String getJson(String apiKey, String label, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
         resetParams();
 
         /* Build URL */
         StringBuilder portURL = new StringBuilder(pURL);
         location.append(Double.toString(currentLocation.getLatitude())).append(",").append(Double.toString(currentLocation.getLongitude()));
         radius.append(Double.toString(meters));
-        rankBy.append(context.getString(R.string.distance_label));
-        key.append(context.getString(R.string.google_locations_key));
+        rankBy.append(label);
+        key.append(apiKey);
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
 
         Log.d(TAG, String.valueOf(portURL));
