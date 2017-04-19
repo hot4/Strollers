@@ -6,6 +6,7 @@ import android.test.mock.MockContext;
 import android.util.Log;
 
 import com.example.strollers.strollers.BuildConfig;
+import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.Models.Destinations;
 import com.example.strollers.strollers.R;
@@ -42,7 +43,7 @@ public class LocationTest {
         sampleLocation = new Location("Test");
         sampleLocation.setLatitude(42.7309885);
         sampleLocation.setLongitude(-73.6820253);
-        sampleDistance = 10.0;
+        sampleDistance = RouteHelper.convertMilesToMeters(10.0);
     }
 
     @Test
