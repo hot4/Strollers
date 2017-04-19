@@ -11,6 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +26,7 @@ import android.util.Log;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
+@RunWith(RobolectricTestRunner.class)
 public class LocationTest {
     private Context mContext;
     private Context context;
