@@ -51,10 +51,12 @@ public class RouteTypeActivity extends Activity implements View.OnClickListener 
             case R.id.distance:
                 intent.putExtra(Constants.ROUTE_PROMPT, R.string.distance_prompt);
                 intent.putExtra(Constants.ROUTE_UNIT, R.string.distance_unit);
+                intent.putExtra(String.valueOf(Constants.IS_DIST), R.string.distance_label);
                 break;
             case R.id.calorie:
                 intent.putExtra(Constants.ROUTE_PROMPT, R.string.calorie_prompt);
                 intent.putExtra(Constants.ROUTE_UNIT, R.string.calorie_unit);
+                intent.putExtra(String.valueOf(Constants.IS_CAL), R.string.calorie_label);
                 break;
         }
 
