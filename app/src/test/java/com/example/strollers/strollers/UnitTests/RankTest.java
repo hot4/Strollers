@@ -6,6 +6,7 @@ import android.location.Location;
 import com.example.strollers.strollers.BuildConfig;
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.DestinationComparator;
 import com.example.strollers.strollers.Models.Destinations;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
@@ -22,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,7 +32,7 @@ import static junit.framework.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class LocationTest {
+public class RankTest {
 
     private Context context = RuntimeEnvironment.application;
     private Location sampleLocation;
@@ -44,9 +47,8 @@ public class LocationTest {
         sampleDistance = RouteHelper.convertMilesToMeters(10.0);
 
     }
-
     @Test
-    public void distanceChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
+    public void distanceRankChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
         GenerateRoutesUtility testRoute = new GenerateRoutesUtility();
         String data = testRoute.getJson("AIzaSyCnF4sg6MaCkXXYs8LUNcf8hRWI5eJ4XpI", "distance", sampleLocation, sampleDistance);
         JSONObject responseOb = new JSONObject(data);
@@ -60,12 +62,22 @@ public class LocationTest {
         InputStream is = context.getAssets().open(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line;
+
         List<Destination> destsList = destinations.getDestsList();
+        Comparator<Destination> destComparator = new DestinationComparator();
+        Collections.sort(destsList, destComparator);
+
         for (int i = 0; i < destsList.size(); i++) {
             line = reader.readLine();
             assertEquals(line, destsList.get(i).getName());
             line = reader.readLine();
             assertEquals(line, destsList.get(i).getDistance().toString());
         }
+
+//        for (int i = 0; i < destsList.size(); i++) {
+//            Log.d("NAME", destsList.get(i).getName());
+//            Log.d("DISTANCE", destsList.get(i).getDistance().toString());
+//        }
     }
 }
+
