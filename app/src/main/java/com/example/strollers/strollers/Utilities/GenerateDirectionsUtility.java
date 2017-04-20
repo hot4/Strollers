@@ -48,9 +48,9 @@ public class GenerateDirectionsUtility {
         return url;
     }
 
-    private List<List<HashMap<String, String>>> parseJson(JSONObject data)
+    private List<Route> parseJson(JSONObject data)
     {
-        List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String, String>>>();
+        List<Route> routes = new ArrayList<Route>();
         JSONArray jRoutes = null;
         JSONArray jLegs = null;
         JSONArray jSteps = null;
@@ -59,7 +59,7 @@ public class GenerateDirectionsUtility {
             /** Traversing all routes */
             for (int i = 0; i < jRoutes.length(); i++) {
                 jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
-                List<HashMap<String, String>> path = new ArrayList<HashMap<String, String>>();
+                //List<Route> path = new ArrayList<Route>();
 
                 /** Traversing all legs */
                 for (int j = 0; j < jLegs.length(); j++) {
@@ -71,23 +71,31 @@ public class GenerateDirectionsUtility {
                         polyline = (String) ((JSONObject) ((JSONObject) jSteps
                                 .get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
-
+                        Route rt = new Route();
+                        int temp = (int) ((JSONObject)((JSONObject) jSteps.get(k))
+                                .get("distance")).get("value");
+                        rt.distance = (double) temp;
                         /** Traversing all points */
-                        for (int l = 0; l < list.size(); l++) {
-                            HashMap<String, String> hm = new HashMap<String, String>();
-                            hm.put("lat",
-                                    Double.toString(((LatLng) list.get(l)).latitude));
-                            hm.put("lng",
-                                    Double.toString(((LatLng) list.get(l)).longitude));
-                            path.add(hm);
-                        }
+                        rt.points = list;
+                        //for (int l = 0; l < list.size(); l++) {
+                        //    rt.addPoint(list.get(l));
+//                            HashMap<String, String> hm = new HashMap<String, String>();
+//                            hm.put("lat",
+//                                    Double.toString(((LatLng) list.get(l)).latitude));
+//                            hm.put("lng",
+//                                    Double.toString(((LatLng) list.get(l)).longitude));
+//                            path.add(hm);
+                       // }
+                        //path.add(rt);
+                        routes.add(rt);
                     }
-                    routes.add(path);
+                    //routes.add(path);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return routes;
     }
@@ -126,7 +134,7 @@ public class GenerateDirectionsUtility {
     }
 
 
-    public List<List<HashMap<String, String>>> getLocations(Context context, Location currentLocation, Destination finalDestination) throws ExecutionException, InterruptedException {
+    public List<Route> getLocations(Context context, Location currentLocation, Destination finalDestination) throws ExecutionException, InterruptedException {
 
         resetParams();
         origin += Double.toString(currentLocation.getLatitude()) + "," + Double.toString(currentLocation.getLongitude());
@@ -135,7 +143,7 @@ public class GenerateDirectionsUtility {
         String url = getMapsApiDirectionsUrl();
         GetData getData = new GetData();
         String data = getData.execute(url).get();
-        List<List<HashMap<String, String>>> result = null;
+        List<Route> result = null;
         try {
             JSONObject jObject = new JSONObject(data);
             result = parseJson(jObject);

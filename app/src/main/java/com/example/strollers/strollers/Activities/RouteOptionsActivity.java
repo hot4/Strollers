@@ -125,7 +125,7 @@ public class RouteOptionsActivity extends Activity {
 
                 /* Serialize JSON into Destination and add to list */
                 Destinations destinations = Destinations.parseJson(data);
-                destinations.initializeDistances(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                destinations.initializeDistances(getApplicationContext(),mCurrentLocation);
                 destsList.addAll(destinations.getDestsList());
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();

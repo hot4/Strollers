@@ -1,6 +1,18 @@
 package com.example.strollers.strollers.Helpers;
 
+import android.content.Context;
 import android.location.Location;
+
+import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.Route;
+import com.example.strollers.strollers.Utilities.GenerateDirectionsUtility;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.concurrent.ExecutionException;
 
 public class RouteHelper {
 
@@ -15,11 +27,25 @@ public class RouteHelper {
         return meters / milesMetersRatio;
     }
 
-    public static Double distance(Double lat1, Double lon1, Double lat2, Double lon2) {
+
+    public static Double distance(Context context, Location loc, Destination des) {
         /* Calculate distance between coordinates */
         float[] results = new float[1];
-        Location.distanceBetween(lat1, lon1, lat2, lon2, results);
+        List<Route> routes = null;
+        double total = 0;
+        try {
+            //call generate directions utility and loop thorugh each point to get the distance
+            GenerateDirectionsUtility generateDirectionsUtility = new GenerateDirectionsUtility();
+            routes = generateDirectionsUtility.getLocations(context, loc, des);
 
-        return convertMetersToMiles((double) results[0]);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        for(int i=0; i< routes.size(); i++) {
+            total += routes.get(i).distance;
+        }
+        return convertMetersToMiles(total);
     }
 }

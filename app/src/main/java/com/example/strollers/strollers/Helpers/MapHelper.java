@@ -45,32 +45,32 @@ public class MapHelper {
         return markMap(map, new LatLng(dest.getLat(), dest.getLng()), label);
     }
 
-    public static PolylineOptions drawRoute(Activity activty, Route route) {
-////        List<List<HashMap<String, String>>> routes
-        List<LatLng> points = new ArrayList<>();
-        PolylineOptions polyLineOptions = new PolylineOptions();
-//
-//        // traversing through routes
-//        for (int i = 0; i < routes.size(); i++) {
-//            points = new ArrayList<LatLng>();
-//            polyLineOptions = new PolylineOptions();
-//            List<HashMap<String, String>> path = routes.get(i);
-//
-//            for (int j = 0; j < path.size(); j++) {
-//                HashMap<String, String> point = path.get(j);
-//
-//                double lat = Double.parseDouble(point.get("lat"));
-//                double lng = Double.parseDouble(point.get("lng"));
-//                LatLng position = new LatLng(lat, lng);
-        points.add(route.getOriginLatLng());
-        points.add(route.getDestLatLng());
-//                points.add(position);
-//            }
-//
-            polyLineOptions.addAll(points);
-            polyLineOptions.width(5);
-            polyLineOptions.color(activty.getColor(R.color.blue));
-//        }
-        return polyLineOptions;
-    }
+//    public static PolylineOptions drawRoute(Activity activty, Route route) {
+//////        List<List<HashMap<String, String>>> routes
+//        List<LatLng> points = new ArrayList<>();
+//        PolylineOptions polyLineOptions = new PolylineOptions();
+////
+////        // traversing through routes
+////        for (int i = 0; i < routes.size(); i++) {
+////            points = new ArrayList<LatLng>();
+////            polyLineOptions = new PolylineOptions();
+////            List<HashMap<String, String>> path = routes.get(i);
+////
+////            for (int j = 0; j < path.size(); j++) {
+////                HashMap<String, String> point = path.get(j);
+////
+////                double lat = Double.parseDouble(point.get("lat"));
+////                double lng = Double.parseDouble(point.get("lng"));
+////                LatLng position = new LatLng(lat, lng);
+//        points.add(route.getOriginLatLng());
+//        points.add(route.getDestLatLng());
+////                points.add(position);
+////            }
+////
+//            polyLineOptions.addAll(points);
+//            polyLineOptions.width(5);
+//            polyLineOptions.color(activty.getColor(R.color.blue));
+////        }
+//        return polyLineOptions;
+//    }
 }

@@ -211,7 +211,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         updateUI();
     }
 
-    private void drawRoute(List<List<HashMap<String, String>>> routes)
+    private void drawRoute(List<Route> routes)
     {
         ArrayList<LatLng> points = null;
         PolylineOptions polyLineOptions = null;
@@ -220,31 +220,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         for (int i = 0; i < routes.size(); i++) {
             points = new ArrayList<LatLng>();
             polyLineOptions = new PolylineOptions();
-            List<HashMap<String, String>> path = routes.get(i);
+            Route route = routes.get(i);
 
-            for (int j = 0; j < path.size(); j++) {
-                HashMap<String, String> point = path.get(j);
+//            for (int j = 0; j < route.points.size(); j++) {
+//                LatLng position = new LatLng(route.points.get(j).latitude, route.points.get(j).longitude);
+//                points.add(position);
+//            }
 
-                double lat = Double.parseDouble(point.get("lat"));
-                double lng = Double.parseDouble(point.get("lng"));
-                LatLng position = new LatLng(lat, lng);
-
-                points.add(position);
-            }
-
-            polyLineOptions.addAll(points);
+            polyLineOptions.addAll(route.getPoints());
             polyLineOptions.width(2);
             polyLineOptions.color(Color.BLUE);
+            mMap.addPolyline(polyLineOptions);
         }
 
-        mMap.addPolyline(polyLineOptions);
+        //mMap.addPolyline(polyLineOptions);
     }
 
     private void updateUI() {
         /* Mark map with current location when map finishes loading */
         if (null != mCurrentLocation) {
             mCurrentMarker = MapHelper.markCurrLocOnMap(mMap, mCurrentMarker, mCurrentLocation, getString(R.string.current_location));
-            List<List<HashMap<String, String>>> data=null;
+            List<Route> data=null;
             /* Mark map with destination and draw line */
             if (drawRoute) {
                 try {
@@ -255,7 +251,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 drawRoute = false;
                 mDestinationMarker = MapHelper.markDestOnMap(mMap, mDestinationMarker, mDestinationLocation, getString(R.string.destination_label));
-                route = new Route(mCurrentLocation, mDestinationLocation);
+                //route = new Route(mCurrentLocation, mDestinationLocation);
                 drawRoute(data);
                 //mMap.addPolyline(MapHelper.drawRoute(this, route));
             }
