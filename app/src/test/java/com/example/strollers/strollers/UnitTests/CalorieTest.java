@@ -29,7 +29,7 @@ import static junit.framework.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class LocationTest {
+public class CalorieTest {
 
     private Context context = RuntimeEnvironment.application;
     private Location sampleLocation;
@@ -46,7 +46,7 @@ public class LocationTest {
     }
 
     @Test
-    public void distanceChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
+    public void calorieChecker() throws ExecutionException, InterruptedException, JSONException, IOException {
         GenerateRoutesUtility testRoute = new GenerateRoutesUtility();
         String data = testRoute.getJson("AIzaSyCnF4sg6MaCkXXYs8LUNcf8hRWI5eJ4XpI", "distance", sampleLocation, sampleDistance);
         JSONObject responseOb = new JSONObject(data);
