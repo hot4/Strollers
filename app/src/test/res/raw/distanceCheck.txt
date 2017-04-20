@@ -1,0 +1,40 @@
+Albany
+6.600784912206464
+Best Western Plus Franklin Square Inn Troy/Albany
+0.40359996928241804
+Hilton Garden Inn Troy
+0.7756827962831827
+Red Carpet Inn
+5.37315993057575
+Hampton Inn Albany-Wolf Road (Airport)
+5.785849918701347
+The Desmond Hotel Albany
+5.940496708208437
+Homewood Suites by Hilton Albany
+5.951634058659926
+Albany Marriott
+6.022403018908636
+Best Western Albany Airport Inn
+6.045854926953156
+Red Roof Inn Albany Airport
+6.113740943320694
+Ramada Plaza Albany
+6.220504528941606
+Hampton Inn & Suites Albany-Downtown
+6.417052004186178
+Hilton Albany
+6.61716204805343
+Morgan State House Inn
+6.653508621952485
+Holiday Inn Express Albany - Downtown
+6.8481246279539985
+SpringHill Suites by Marriott Albany-Colonie
+7.0399936150226425
+Hilton Garden Inn Albany Medical Center
+7.254002591661571
+TownePlace Suites by Marriott Albany University Area
+7.382012338956121
+Fairfield Inn by Marriott Albany University Area
+7.410232542731697
+Troy
+0.5275527512952288

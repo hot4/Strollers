@@ -2,14 +2,11 @@ package com.example.strollers.strollers.UnitTests;
 
 import android.content.Context;
 import android.location.Location;
-import android.test.mock.MockContext;
-import android.util.Log;
 
 import com.example.strollers.strollers.BuildConfig;
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Models.Destination;
 import com.example.strollers.strollers.Models.Destinations;
-import com.example.strollers.strollers.R;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
 import org.json.JSONException;
@@ -22,8 +19,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,7 +26,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
