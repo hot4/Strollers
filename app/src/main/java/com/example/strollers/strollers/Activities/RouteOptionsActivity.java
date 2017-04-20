@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -35,8 +37,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.Comparator;
 import java.util.Collections;
-
-
+import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,29 +95,38 @@ public class RouteOptionsActivity extends Activity {
                 /* User has completed entering a value */
                 if (keyCode == EditorInfo.IME_ACTION_SEARCH || keyCode == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-
                     String amount = inputAmount.getText().toString();
-                    Double totalMiles = 0.0;
-                    /* Amount is greater than or equal to zero */
-                    if (!amount.isEmpty()) {
-                        totalMiles = Double.parseDouble(amount);
+                    if (String.valueOf(Constants.IS_DIST) == "true") {
+                        Double totalMiles = 0.0;
+                        /* Amount is greater than or equal to zero */
+                        if (!amount.isEmpty()) {
+                            totalMiles = Double.parseDouble(amount);
+                        }
+                        determineRoutes(totalMiles);
+                        displayRoutes();
+                        return true;
                     }
-
-                    determineRoutes(totalMiles);
-                    displayRoutes();
-                    return true;
+                    if (String.valueOf(Constants.IS_CAL) == "true") {
+                        Double totalCal = 0.0;
+                        /* Amount is greater than or equal to zero */
+                        if (!amount.isEmpty()) {
+                            totalCal = Double.parseDouble(amount);
+                        }
+                        determineRoutes(totalCal);
+                        displayRoutes();
+                        return true;
+                    }
                 }
                 return false;
             }
         });
     }
 
-    public List<Destination> determineRoutes(Double totalMiles) {
+    public List<Destination> determineRoutes(Double totalAmount) {
         destsList.clear();
-        if (totalMiles != 0) {
-            Double radius = RouteHelper.convertMilesToMeters(totalMiles);
+        if (totalAmount != 0) {
+            Double radius = RouteHelper.convertMilesToMeters(totalAmount);
             try {
-
                 /* URL request to get destinations */
                 GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
                 String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
@@ -127,15 +137,30 @@ public class RouteOptionsActivity extends Activity {
                 Destinations destinations = Destinations.parseJson(data);
                 destinations.initializeDistances(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                 destsList.addAll(destinations.getDestsList());
+
+                if (String.valueOf(Constants.IS_CAL) == "true") {
+                    Iterator<Destination> iter = destsList.iterator();
+                    //for (Destination dest: destsList) {
+                    while (iter.hasNext()) {
+                        Destination d = iter.next();
+                        Double calsBurned = (d.getDistance()*102.6);
+                        if (totalAmount >= calsBurned) {
+                            iter.remove();
+                        }
+                    }
+
+                }
+
             } catch (ExecutionException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
         }
         /* sort Destinations List */
         Comparator<Destination> destComparator = new DestinationComparator();
-        Collections.sort(destsList, destComparator);
 
-        /* Update adapter with new destinations list */
+        if (String.valueOf(Constants.IS_DIST) == "true") {
+            Collections.sort(destsList, destComparator);
+        }
         destsAdapter.notifyDataSetChanged();
         return destsList;
     }
