@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -120,7 +119,7 @@ public class RouteOptionsActivity extends Activity {
 
                 /* URL request to get destinations */
                 GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
-                String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
+                String data = generateRoutes.getJson(getString(R.string.google_locations_key), getString(R.string.distance_label), mCurrentLocation, radius);
                 JSONObject responseOb = new JSONObject(data);
                 responseOb.getJSONArray(results);
 
