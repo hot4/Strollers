@@ -1,102 +1,32 @@
 package com.example.strollers.strollers.Models;
 
-import com.google.gson.annotations.SerializedName;
+import android.location.Location;
 
-import java.io.Serializable;
-import java.util.List;
+import com.google.android.gms.maps.model.LatLng;
 
-public class Route implements Serializable {
+public class Route {
 
-    @SerializedName("geometry")
-    private Geometry geometry;
+    public Location currLoc;
+    public Destination destLoc;
 
-    @SerializedName("icon")
-    private String icon;
-
-    @SerializedName("id")
-    private String id;
-
-    @SerializedName("name")
-    private String name;
-
-    @SerializedName("place_id")
-    private String placeid;
-
-    @SerializedName("reference")
-    private String reference;
-
-    @SerializedName("scope")
-    private String scope;
-
-    @SerializedName("types")
-    private List<String> types;
-
-    @SerializedName("vicinity")
-    private String vicinity;
-
-    private String origin;
-    private String destination;
-    private Double distance;
-
-    public Route(String origin, String destination, Double distance) {
-        this.origin = origin;
-        this.destination = destination;
-        this.distance = distance;
+    public Route(Location currLoc, Destination destLoc) {
+        this.currLoc = currLoc;
+        this.destLoc = destLoc;
     }
 
-    public Geometry getGeometry() {
-        return geometry;
+    public Location getOrigin() {
+        return currLoc;
     }
 
-    public Double getLat(){
-        return getGeometry().getPosition().getLat();
+    public Destination getDestination() {
+        return destLoc;
     }
 
-    public Double getLng() {
-        return getGeometry().getPosition().getLng();
+    public LatLng getOriginLatLng() {
+        return new LatLng(currLoc.getLatitude(), currLoc.getLongitude());
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPlaceID() {
-        return placeid;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public List<String> getTypes() {
-        return types;
-    }
-
-    public String getVicinity() {
-        return vicinity;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public Double getDistance() {
-        return distance;
+    public LatLng getDestLatLng() {
+        return new LatLng(destLoc.getLat(), destLoc.getLng());
     }
 }
