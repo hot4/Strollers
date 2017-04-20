@@ -95,27 +95,17 @@ public class RouteOptionsActivity extends Activity {
                 /* User has completed entering a value */
                 if (keyCode == EditorInfo.IME_ACTION_SEARCH || keyCode == EditorInfo.IME_ACTION_DONE
                         || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+
                     String amount = inputAmount.getText().toString();
-                    if (String.valueOf(Constants.IS_DIST) == "true") {
-                        Double totalMiles = 0.0;
-                        /* Amount is greater than or equal to zero */
-                        if (!amount.isEmpty()) {
-                            totalMiles = Double.parseDouble(amount);
-                        }
-                        determineRoutes(totalMiles);
-                        displayRoutes();
-                        return true;
+                    Double totalMiles = 0.0;
+                    /* Amount is greater than or equal to zero */
+                    if (!amount.isEmpty()) {
+                        totalMiles = Double.parseDouble(amount);
                     }
-                    if (String.valueOf(Constants.IS_CAL) == "true") {
-                        Double totalCal = 0.0;
-                        /* Amount is greater than or equal to zero */
-                        if (!amount.isEmpty()) {
-                            totalCal = Double.parseDouble(amount);
-                        }
-                        determineRoutes(totalCal);
-                        displayRoutes();
-                        return true;
-                    }
+
+                    determineRoutes(totalMiles);
+                    displayRoutes();
+                    return true;
                 }
                 return false;
             }
@@ -140,7 +130,6 @@ public class RouteOptionsActivity extends Activity {
 
                 if (String.valueOf(Constants.IS_CAL) == "true") {
                     Iterator<Destination> iter = destsList.iterator();
-                    //for (Destination dest: destsList) {
                     while (iter.hasNext()) {
                         Destination d = iter.next();
                         Double calsBurned = (d.getDistance()*102.6);
@@ -148,7 +137,6 @@ public class RouteOptionsActivity extends Activity {
                             iter.remove();
                         }
                     }
-
                 }
 
             } catch (ExecutionException | InterruptedException | JSONException e) {
@@ -161,6 +149,7 @@ public class RouteOptionsActivity extends Activity {
         if (String.valueOf(Constants.IS_DIST) == "true") {
             Collections.sort(destsList, destComparator);
         }
+
         destsAdapter.notifyDataSetChanged();
         return destsList;
     }
