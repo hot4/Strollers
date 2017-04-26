@@ -6,6 +6,7 @@ import android.location.Location;
 import com.example.strollers.strollers.BuildConfig;
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.example.strollers.strollers.Models.Destination;
+import com.example.strollers.strollers.Models.DestinationComparator;
 import com.example.strollers.strollers.Models.Destinations;
 import com.example.strollers.strollers.Utilities.GenerateRoutesUtility;
 
@@ -22,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -61,6 +64,10 @@ public class LocationTest {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String line;
         List<Destination> destsList = destinations.getDestsList();
+
+        Comparator<Destination> destComparator = new DestinationComparator();
+        Collections.sort(destsList, destComparator);
+
         for (int i = 0; i < destsList.size(); i++) {
             line = reader.readLine();
             assertEquals(line, destsList.get(i).getName());
