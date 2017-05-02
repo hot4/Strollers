@@ -1,11 +1,7 @@
 package com.example.strollers.strollers.Utilities;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.example.strollers.strollers.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
