@@ -1,5 +1,8 @@
 package com.example.strollers.strollers.Models;
 
+import android.content.Context;
+import android.location.Location;
+
 import com.example.strollers.strollers.Helpers.RouteHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,12 +24,12 @@ public class Destinations {
         return destsList;
     }
 
-    public void initializeDistances(Double currLat, Double currLng) {
+    public void initializeDistances(Context context, Location loc) {
 
         for (int i = 0; i < destsList.size(); i++) {
             Destination destination = destsList.get(i);
             /* Calculate linear distance between origin and destination */
-            destination.setDistance(RouteHelper.distance(currLat, currLng, destination.getLat(), destination.getLng()));
+            destination.setDistance(RouteHelper.distance(context, loc, destination));
         }
     }
 
