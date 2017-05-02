@@ -1,11 +1,7 @@
 package com.example.strollers.strollers.Utilities;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.example.strollers.strollers.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -17,8 +13,6 @@ import java.util.concurrent.ExecutionException;
 import javax.net.ssl.HttpsURLConnection;
 
 public class GenerateRoutesUtility {
-
-    private final static String TAG = GenerateRoutesUtility.class.getSimpleName();
 
     private HttpsURLConnection urlConnection;
 
@@ -38,17 +32,16 @@ public class GenerateRoutesUtility {
         key = new StringBuilder("key=");
     }
 
-    public String getJson(Context context, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
+    public String getJson(String apiKey, String label, Location currentLocation, Double meters) throws ExecutionException, InterruptedException {
         resetParams();
 
         /* Build URL */
         StringBuilder portURL = new StringBuilder(pURL);
         location.append(Double.toString(currentLocation.getLatitude())).append(",").append(Double.toString(currentLocation.getLongitude()));
         radius.append(Double.toString(meters));
-        rankBy.append(context.getString(R.string.distance_label));
-        key.append(context.getString(R.string.google_locations_key));
+        rankBy.append(label);
+        key.append(apiKey);
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
-
 
         /* Get data from URL */
         GetData getData = new GetData();

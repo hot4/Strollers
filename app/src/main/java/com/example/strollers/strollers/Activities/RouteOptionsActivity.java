@@ -119,7 +119,7 @@ public class RouteOptionsActivity extends Activity {
             try {
                 /* URL request to get destinations */
                 GenerateRoutesUtility generateRoutes = new GenerateRoutesUtility();
-                String data = generateRoutes.getJson(getApplicationContext(), mCurrentLocation, radius);
+                String data = generateRoutes.getJson(getString(R.string.google_locations_key), getString(R.string.distance_label), mCurrentLocation, radius);
                 JSONObject responseOb = new JSONObject(data);
                 responseOb.getJSONArray(results);
 
