@@ -18,8 +18,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class GenerateRoutesUtility {
 
-    private static final String TAG = GenerateRoutesUtility.class.getSimpleName();
-
     private HttpsURLConnection urlConnection;
 
     /* URL keys */
@@ -49,7 +47,6 @@ public class GenerateRoutesUtility {
         key.append(apiKey);
         portURL.append(location).append(and).append(radius).append(and).append(rankBy).append(and).append(key);
 
-        Log.d(TAG, String.valueOf(portURL));
         /* Get data from URL */
         GetData getData = new GetData();
         return getData.execute(portURL.toString()).get();
@@ -72,6 +69,7 @@ public class GenerateRoutesUtility {
                 while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
+                in.close();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
